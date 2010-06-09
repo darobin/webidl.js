@@ -1,0 +1,5 @@
+module foo {
+    interface bar1 : oneParent {};
+    interface bar2 : twoParent1, twoParent2 {};
+    interface bar3 : ::absolute::reference::Type, relative::reference, ::justAbs, justRel {};
+};

@@ -1,2 +1,261 @@
 
+// PEG.js grammar for WebIDL
 
+// change this as we define more things
+start = definitions
+
+// white space
+s
+  = [ \t\r\n\f]+
+w
+  = s?
+S "whitespace"
+  = s
+
+// basic tokens
+identifier
+    =   nmstart:[A-Z_a-z] nmchars:[0-9A-Z_a-z]*
+        { return nmstart + nmchars.join(""); }
+
+// higher-level structure
+definitions
+    =   defs:definition*
+        { return defs; }
+
+definition
+    =   def:(module / interface)
+        { return def; }
+
+module
+    =   extAttrs:extendedAttributeList? S? "module" S name:identifier w "{" w defs:definitions w "}" w ";" w
+        { return { type: "module", name: name, definitions: defs, extAttrs: extAttrs }; }
+
+interface
+    =   extAttrs:extendedAttributeList? S? "interface" S name:identifier w herit:ifInheritance? w "{" w mem:ifMember* w "}" w ";" w
+        { return { type: "interface", name: name, inheritance: herit, members: mem, extAttrs: extAttrs }; }
+
+
+// interface definitions
+ifInheritance
+    =   ":" w herit:ScopedNameList
+        { return herit; }
+
+ifMember
+    =   "XXX"
+        { return {}; }
+
+
+// extended attributes
+extendedAttributeList
+    =   "XXX"
+        { return []; }
+
+
+// basics
+ScopedNameList
+    =   first:ScopedName others:ScopedNameListRest*
+        {   var ret = [first];
+            for (var i = 0, n = others.length; i < n; i++) { ret.push(others[i]); }
+            return ret; }
+
+ScopedNameListRest
+    =   w "," w rest:ScopedName
+        { return rest; }
+
+ScopedName
+    =   name:(AbsoluteScopedName / RelativeScopedName)
+        { return name; }
+
+AbsoluteScopedName
+    =   "::" rel:RelativeScopedName
+        { return "::" + rel; }
+
+RelativeScopedName
+    =   name:identifier rest:ScopedNameRest*
+        { return name + rest.join(""); }
+
+ScopedNameRest
+    =   name:("::" identifier)
+        { return name.join(""); }
+
+
+
+/*
+[2]	Definition	→	Module | Interface | Exception | Typedef | ImplementsStatement
+[5]	InterfaceInheritance	→	":" ScopedNameList
+ | ε
+[6]	InterfaceMembers	→	ExtendedAttributeList InterfaceMember InterfaceMembers
+ | ε
+[7]	InterfaceMember	→	Const
+ | AttributeOrOperation
+[8]	Exception	→	"exception" identifier "{" ExceptionMembers "}" ";"
+[9]	ExceptionMembers	→	ExtendedAttributeList ExceptionMember ExceptionMembers
+ | ε
+[10]	Typedef	→	"typedef" Type identifier ";"
+[11]	ImplementsStatement	→	ScopedName "implements" ScopedName ";"
+[12]	Const	→	"const" Type identifier "=" ConstExpr ";"
+[13]	ConstExpr	→	BooleanLiteral
+ | integer
+ | float
+[14]	BooleanLiteral	→	"true"
+ | "false"
+[15]	AttributeOrOperation	→	"stringifier" StringifierAttributeOrOperation
+ | Attribute
+ | Operation
+[16]	StringifierAttributeOrOperation	→	Attribute
+ | OperationRest
+ | ";"
+[17]	Attribute	→	ReadOnly "attribute" Type identifier GetRaises SetRaises ";"
+[18]	ReadOnly	→	"readonly"
+ | ε
+[19]	GetRaises	→	"getraises" ExceptionList
+ | ε
+[20]	SetRaises	→	"setraises" ExceptionList
+ | ε
+[21]	Operation	→	OmittableSpecials OperationRest
+[22]	OmittableSpecials	→	"omittable" Specials
+ | Specials
+[23]	Specials	→	Special Specials
+ | ε
+[24]	Special	→	"getter"
+ | "setter"
+ | "creator"
+ | "deleter"
+ | "caller"
+[25]	OperationRest	→	ReturnType OptionalIdentifier "(" ArgumentList ")" Raises ";"
+[26]	OptionalIdentifier	→	identifier
+ | ε
+[27]	Raises	→	"raises" ExceptionList
+ | ε
+[28]	ExceptionList	→	"(" ScopedNameList ")"
+[29]	ArgumentList	→	Argument Arguments
+ | ε
+[30]	Arguments	→	"," Argument Arguments
+ | ε
+[31]	Argument	→	ExtendedAttributeList In Optional Type Ellipsis identifier
+[32]	In	→	"in"
+ | ε
+[33]	Optional	→	"optional"
+ | ε
+[34]	Ellipsis	→	"..."
+ | ε
+[35]	ExceptionMember	→	Const
+ | ExceptionField
+[36]	ExceptionField	→	Type identifier ";"
+[37]	ExtendedAttributeList	→	"[" ExtendedAttribute ExtendedAttributes "]"
+ | ε
+[38]	ExtendedAttributes	→	"," ExtendedAttribute ExtendedAttributes
+ | ε
+[39]	ExtendedAttribute	→	"(" ExtendedAttributeInner ")" ExtendedAttributeRest
+ | "[" ExtendedAttributeInner "]" ExtendedAttributeRest
+ | "{" ExtendedAttributeInner "}" ExtendedAttributeRest
+ | Other ExtendedAttributeRest
+[40]	ExtendedAttributeRest	→	ExtendedAttribute
+ | ε
+[41]	ExtendedAttributeInner	→	"(" ExtendedAttributeInner ")" ExtendedAttributeInner
+ | "[" ExtendedAttributeInner "]" ExtendedAttributeInner
+ | "{" ExtendedAttributeInner "}" ExtendedAttributeInner
+ | OtherOrComma ExtendedAttributeInner
+ | ε
+[42]	Other	→	integer
+ | float
+ | identifier
+ | string
+ | other
+ | "..."
+ | ":"
+ | "::"
+ | ";"
+ | "<"
+ | "="
+ | ">"
+ | "?"
+ | "false"
+ | "object"
+ | "true"
+ | "any"
+ | "attribute"
+ | "boolean"
+ | "caller"
+ | "const"
+ | "creator"
+ | "deleter"
+ | "double"
+ | "exception"
+ | "float"
+ | "getraises"
+ | "getter"
+ | "implements"
+ | "in"
+ | "interface"
+ | "long"
+ | "module"
+ | "octet"
+ | "omittable"
+ | "optional"
+ | "raises"
+ | "sequence"
+ | "setraises"
+ | "setter"
+ | "short"
+ | "DOMString"
+ | "stringifier"
+ | "typedef"
+ | "unsigned"
+ | "void"
+[43]	OtherOrComma	→	Other
+ | ","
+[44]	Type	→	NullableType
+ | ScopedName
+ | "any"
+ | "object"
+[45]	NullableType	→	UnsignedIntegerType Nullable
+ | "boolean" Nullable
+ | "octet" Nullable
+ | "float" Nullable
+ | "double" Nullable
+ | "DOMString" Nullable
+ | "sequence" "<" Type ">" Nullable
+[46]	UnsignedIntegerType	→	"unsigned" IntegerType
+ | IntegerType
+[47]	IntegerType	→	"short"
+ | "long" OptionalLong
+[48]	OptionalLong	→	"long"
+ | ε
+[49]	Nullable	→	"?"
+ | ε
+[50]	ReturnType	→	Type
+ | "void"
+[57]	ExtendedAttributeNoArg	→	identifier
+[58]	ExtendedAttributeArgList	→	identifier "(" ArgumentList ")"
+[59]	ExtendedAttributeIdent	→	identifier "=" identifier
+[60]	ExtendedAttributeScopedName	→	identifier "=" ScopedName
+[61]	ExtendedAttributeNamedArgList	→	identifier "=" identifier "(" ArgumentList ")"
+*/
+
+
+// basic bits
+// octal       :   ("0" [0-7]*)
+//                 { return $1; }
+// hex         :   ("0" [Xx] [0-9A-Fa-f]+)
+//                 { return $1; }
+// decimal     :   ([0-9] [0-9]*)
+//                 { return $1; }
+// integer      :   ("-"? (octal / hex / decimal))
+//                 { return $1; }
+// floatEe     :   [Ee] [+-]? [0-9]+
+//                 { return $1; }
+// expFloat    :   ([0-9]+ floatEe)
+//                 { return $1; }
+// leadFloat   :   ([0-9]+ "." [0-9]* floatEe?)
+//                 { return $1; }
+// dotFloat    :   ([0-9]* "." [0-9]+ floatEe?)
+//                 { return $1; }
+// float        :   (-? (leadFloat / dotFloat / expFloat))
+//                 { return $1; }
+// string   :   '"' [^""]* '"'
+//                 { return $2; }
+// whitespace   =   [\t\n\r ]+
+//                 { return ""; }
+// other        :   [^\t\n\r 0-9A-Z_a-z]
+//                 { return $1; }
