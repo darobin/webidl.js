@@ -23,7 +23,7 @@ definitions
         { return defs; }
 
 definition
-    =   def:(module / interface)
+    =   def:(module / interface / implements)
         { return def; }
 
 module
@@ -41,8 +41,24 @@ ifInheritance
         { return herit; }
 
 ifMember
+    =   mem:(const / attrOrOp)
+        { return mem; }
+
+const
+    =   extAttrs:extendedAttributeList? S? "const" S type:type S name:identifier w "=" w value:constExpr w ";" w
+        { return { type: "const", extAttrs: extAttrs, idlType: type, name: name, value: value }; }
+
+attrOrOp
     =   "XXX"
         { return {}; }
+
+constExpr
+    =   "XXX"
+        { return {}; }
+
+implements
+    =   target:ScopedName S "implements" S impl:ScopedName w ";" w
+        { return { type: 'implements', target: target, implements: impl }; }
 
 
 // extended attributes
@@ -52,6 +68,10 @@ extendedAttributeList
 
 
 // basics
+type
+    =   "XXX"
+        { return {}; }
+
 ScopedNameList
     =   first:ScopedName others:ScopedNameListRest*
         {   var ret = [first];
@@ -78,27 +98,20 @@ ScopedNameRest
     =   name:("::" identifier)
         { return name.join(""); }
 
+BooleanLiteral
+    =   value("true" / "false")
+        { return value; }
 
 
 /*
 [2]	Definition	→	Module | Interface | Exception | Typedef | ImplementsStatement
-[5]	InterfaceInheritance	→	":" ScopedNameList
- | ε
-[6]	InterfaceMembers	→	ExtendedAttributeList InterfaceMember InterfaceMembers
- | ε
-[7]	InterfaceMember	→	Const
- | AttributeOrOperation
 [8]	Exception	→	"exception" identifier "{" ExceptionMembers "}" ";"
 [9]	ExceptionMembers	→	ExtendedAttributeList ExceptionMember ExceptionMembers
  | ε
 [10]	Typedef	→	"typedef" Type identifier ";"
-[11]	ImplementsStatement	→	ScopedName "implements" ScopedName ";"
-[12]	Const	→	"const" Type identifier "=" ConstExpr ";"
 [13]	ConstExpr	→	BooleanLiteral
  | integer
  | float
-[14]	BooleanLiteral	→	"true"
- | "false"
 [15]	AttributeOrOperation	→	"stringifier" StringifierAttributeOrOperation
  | Attribute
  | Operation
