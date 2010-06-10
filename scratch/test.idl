@@ -1,25 +1,25 @@
-// module foo {
-//     interface bar1 : oneParent {};
-//     interface bar2 : twoParent1, twoParent2 {};
-//     interface bar3 : ::absolute::reference::Type, relative::reference, ::justAbs, justRel {};
-//     
-//     Robin implements BeingCool;
-//     
-//     interface Members {
-//         const unsigned long long ONE = 10e42;
-//         readonly attribute unsigned long long robin getraises (Hell);
-//         void foo();
-//         unsigned short doIt (in boolean fast, Youpi lala, Third arg);
-//         other::module run ( sequence<sequence<unsigned long>?>?... longList ) raises (Boom) ;
-//     };
-//     
-//     typedef Robin cool;
-//     
-//     exception Boom {
-//         const Test life = true;
-//         DOMString message;
-//     };
-// };
+module foo {
+    interface bar1 : oneParent {};
+    interface bar2 : twoParent1, twoParent2 {};
+    interface bar3 : ::absolute::reference::Type, relative::reference, ::justAbs, justRel {};
+    
+    Robin implements BeingCool;
+    
+    interface Members {
+        const unsigned long long ONE = 10e42;
+        readonly attribute unsigned long long robin getraises (Hell);
+        void foo();
+        unsigned short doIt (in boolean fast, Youpi lala, Third arg);
+        other::module run ( sequence<sequence<unsigned long>?>?... longList ) raises (Boom) ;
+    };
+    
+    typedef Robin cool;
+    
+    exception Boom {
+        const Test life = true;
+        DOMString message;
+    };
+};
 
 [RestPOST, RestID=foo]
 module bar {};

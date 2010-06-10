@@ -1,15 +1,13 @@
 
-require.paths.unshift(__dirname + "/../lib");
+require.paths.unshift(__dirname + "/../node");
 var sys = require("sys");
 
 try {
-    var parser = require("generator").parser;
+    var parser = require("WebIDLParser").Parser;
     sys.puts(
         sys.inspect(
             parser.parse(
-                parser.killComments(
-                    require("fs").readFileSync(__dirname + "/test.idl")
-                )
+                require("fs").readFileSync(__dirname + "/test.idl")
             ), false, null
         )
     );

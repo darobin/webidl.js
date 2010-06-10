@@ -1,0 +1,24 @@
+
+WebIDLParser.js is, shockingly enough, a Javascript parser for WebIDL (http://dev.w3.org/2006/webapi/WebIDL/)
+
+In order to use it in a Web context, simply include web/WebIDLParser.js. Note that this file has not been
+minified and is quite large. I tested reducing its size here, and easily got it down to 44K minified and
+6.4K gzipped (being generated, it is rather repetitive code). A "WebIDLParser" object will become available.
+
+Using it from Node.js or a CommonJS environment is equally simple: just put node/WebIDLParser.js in your
+library path and require it. It exports a "Parser" object.
+
+The interface is simple: the only method you need to worry about is parse(str). It takes a string containing
+WebIDL, and returns an AST expressed as a simple JS structure (utilities to traverse it more easily are
+forthcoming).
+
+The grammar isn't exactly the one in the WebIDL draft. In some places it is slightly more permissive (not
+by that much though), and its handling of extended attributes is simpler. It doesn't currently support
+arrays because those weren't described in the draft's grammar, but I'll add them shortly.
+
+If you wish modify the grammar, which is in lib/grammar.peg, go through the following steps:
+
+	- read up on PEG.js at http://pegjs.majda.cz/
+	- create a directory at the root of this repository called depends
+	- inside depends, git clone git://github.com/dmajda/pegjs.git
+	- then run node utils/generate.js to regenerate the JS
