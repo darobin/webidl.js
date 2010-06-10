@@ -14,4 +14,9 @@ module foo {
     };
     
     typedef Robin cool;
+    
+    exception Boom {
+        const Test life = true;
+        DOMString message;
+    };
 };

@@ -120,7 +120,7 @@ definitions
         { return defs; }
 
 definition
-    =   def:(module / interface / implements / typedef)
+    =   def:(module / interface / implements / typedef / exception)
         { return def; }
 
 module
@@ -238,17 +238,22 @@ typedef
     =   "typedef" S type:type S name:identifier w ";" w
         { return { type: 'typedef', name: name, idlType: type }; }
 
+// exception definition
+exception
+    =   "exception" S name:identifier w "{" mem:exMember* "}" w ";" w
+        { return { type: 'exception', name: name, members: mem }; }
+
+exMember
+    =   mem:(const / field)
+        { return mem; }
+
+field
+    =   extAttrs:extendedAttributeList? S? type:type S name:identifier w ";" w
+        { return { type: "field", extAttrs: extAttrs, idlType: type, name: name }; }
+
 
 
 /*
-[2]	Definition	→	Module | Interface | Exception | Typedef | ImplementsStatement
-[8]	Exception	→	"exception" identifier "{" ExceptionMembers "}" ";"
-[9]	ExceptionMembers	→	ExtendedAttributeList ExceptionMember ExceptionMembers
- | ε
-[10]	Typedef	→	"typedef" Type identifier ";"
-[35]	ExceptionMember	→	Const
- | ExceptionField
-[36]	ExceptionField	→	Type identifier ";"
 [37]	ExtendedAttributeList	→	"[" ExtendedAttribute ExtendedAttributes "]"
  | ε
 [38]	ExtendedAttributes	→	"," ExtendedAttribute ExtendedAttributes
