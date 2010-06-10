@@ -69,16 +69,23 @@ type
             return type; }
 
 TypeDesc
-    =   type:(Sequence / SimpleType)
+    =   type:(Sequence / ArrayType / SimpleType)
         { return type; }
 
 Sequence
     =   "sequence<" type:type ">"
-        { return { sequence: true, idlType: type }; }
+        { return { sequence: true, array: false, idlType: type }; }
+
+ArrayType
+    =   type:SimpleType "[]"
+        {
+            type.array = true;
+            return type;
+        }
 
 SimpleType
     =   type:("any" / "object" / "boolean" / "octet" / "float" / "double" / "DOMString" / UnsignedIntegerType / ScopedName)
-        { return { sequence: false, idlType: type }; }
+        { return { sequence: false, array: false, idlType: type }; }
 
 UnsignedIntegerType
     =   uns:"unsigned"? S kind:(("long" S "long") / "long" / "short")

@@ -1059,15 +1059,20 @@ window.WebIDLParser = (function(){
         }
         
         
-        var result3 = parse_Sequence(context);
-        if (result3 !== null) {
-          var result1 = result3;
+        var result4 = parse_Sequence(context);
+        if (result4 !== null) {
+          var result1 = result4;
         } else {
-          var result2 = parse_SimpleType(context);
-          if (result2 !== null) {
-            var result1 = result2;
+          var result3 = parse_ArrayType(context);
+          if (result3 !== null) {
+            var result1 = result3;
           } else {
-            var result1 = null;;
+            var result2 = parse_SimpleType(context);
+            if (result2 !== null) {
+              var result1 = result2;
+            } else {
+              var result1 = null;;
+            };
           };
         }
         var result0 = result1 !== null
@@ -1129,7 +1134,54 @@ window.WebIDLParser = (function(){
           pos = savedPos0;
         }
         var result0 = result1 !== null
-          ? (function(type) { return { sequence: true, idlType: type }; })(result1[1])
+          ? (function(type) { return { sequence: true, array: false, idlType: type }; })(result1[1])
+          : null;
+        
+        
+        
+        cache[cacheKey] = {
+          nextPos: pos,
+          result:  result0
+        };
+        return result0;
+      }
+      
+      var parse_ArrayType = funcs['ArrayType'] = function parse_ArrayType(context) {
+        var cacheKey = "ArrayType" + '@' + pos;
+        var cachedResult = cache[cacheKey];
+        if (cachedResult) {
+          pos = cachedResult.nextPos;
+          return cachedResult.result;
+        }
+        
+        
+        var savedPos0 = pos;
+        var result2 = parse_SimpleType(context);
+        if (result2 !== null) {
+          if (input.substr(pos, 2) === "[]") {
+            var result3 = "[]";
+            pos += 2;
+          } else {
+            var result3 = null;
+            if (context.reportMatchFailures) {
+              matchFailed(quoteString("[]"));
+            }
+          }
+          if (result3 !== null) {
+            var result1 = [result2, result3];
+          } else {
+            var result1 = null;
+            pos = savedPos0;
+          }
+        } else {
+          var result1 = null;
+          pos = savedPos0;
+        }
+        var result0 = result1 !== null
+          ? (function(type) {
+                      type.array = true;
+                      return type;
+                  })(result1[0])
           : null;
         
         
@@ -1253,7 +1305,7 @@ window.WebIDLParser = (function(){
           };
         }
         var result0 = result1 !== null
-          ? (function(type) { return { sequence: false, idlType: type }; })(result1)
+          ? (function(type) { return { sequence: false, array: false, idlType: type }; })(result1)
           : null;
         
         

@@ -24,8 +24,8 @@ Just so that you don't have to look, the most common start parameters are:
 	- exception
 
 The grammar isn't exactly the one in the WebIDL draft. In some places it is slightly more permissive (not
-by that much though), and its handling of extended attributes is simpler. It doesn't currently support
-arrays because those weren't described in the draft's grammar, but I'll add them shortly.
+by that much though), and its handling of extended attributes is simpler. It also adds support for WebIDL
+arrays, even though they are not described in the current draft's grammar.
 
 If you wish modify the grammar, which is in lib/grammar.peg, go through the following steps:
 
