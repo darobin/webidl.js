@@ -8,9 +8,20 @@ minified and is quite large. I tested reducing its size here, and easily got it 
 Using it from Node.js or a CommonJS environment is equally simple: just put node/WebIDLParser.js in your
 library path and require it. It exports a "Parser" object.
 
-The interface is simple: the only method you need to worry about is parse(str). It takes a string containing
+The interface is simple: the only method you need to worry about is parse(str, [start]). It takes a string containing
 WebIDL, and returns an AST expressed as a simple JS structure (utilities to traverse it more easily are
-forthcoming).
+forthcoming). Optionally a second argument can specify which rule of the grammar to start with. This is useful
+when parsing a small WebIDL fragment that may be incomplete. The names of the rules can be found in lib/grammar.peg.
+Just so that you don't have to look, the most common start parameters are:
+
+	- definitions (the default)
+	- interface
+	- Operation
+	- Attribute
+	- type
+	- implements
+	- typedef
+	- exception
 
 The grammar isn't exactly the one in the WebIDL draft. In some places it is slightly more permissive (not
 by that much though), and its handling of extended attributes is simpler. It doesn't currently support

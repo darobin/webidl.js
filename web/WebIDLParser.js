@@ -13,8 +13,10 @@ window.WebIDLParser = (function(){
      * which the parser was generated (see |PEG.buildParser|). If the parsing is
      * unsuccessful, throws |PEG.grammarParser.SyntaxError| describing the error.
      */
-    parse: function(input) {
+    parse: function(input, start) {
       input = this.killComments(input);
+      if (!start) start = 'definitions';
+      var funcs = {};
 
       var pos = 0;
       var rightmostMatchFailuresPos = 0;
@@ -67,7 +69,7 @@ window.WebIDLParser = (function(){
         }
       }
       
-      function parse_s(context) {
+      var parse_s = funcs['s'] = function parse_s(context) {
         var cacheKey = "s" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -112,7 +114,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_w(context) {
+      var parse_w = funcs['w'] = function parse_w(context) {
         var cacheKey = "w" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -133,7 +135,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_identifier(context) {
+      var parse_identifier = funcs['identifier'] = function parse_identifier(context) {
         var cacheKey = "identifier" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -198,7 +200,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_octal(context) {
+      var parse_octal = funcs['octal'] = function parse_octal(context) {
         var cacheKey = "octal" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -263,7 +265,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_hex(context) {
+      var parse_hex = funcs['hex'] = function parse_hex(context) {
         var cacheKey = "hex" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -346,7 +348,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_decimal(context) {
+      var parse_decimal = funcs['decimal'] = function parse_decimal(context) {
         var cacheKey = "decimal" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -411,7 +413,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_integer(context) {
+      var parse_integer = funcs['integer'] = function parse_integer(context) {
         var cacheKey = "integer" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -471,7 +473,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_floatEe(context) {
+      var parse_floatEe = funcs['floatEe'] = function parse_floatEe(context) {
         var cacheKey = "floatEe" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -555,7 +557,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_expFloat(context) {
+      var parse_expFloat = funcs['expFloat'] = function parse_expFloat(context) {
         var cacheKey = "expFloat" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -616,7 +618,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_leadFloat(context) {
+      var parse_leadFloat = funcs['leadFloat'] = function parse_leadFloat(context) {
         var cacheKey = "leadFloat" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -719,7 +721,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_dotFloat(context) {
+      var parse_dotFloat = funcs['dotFloat'] = function parse_dotFloat(context) {
         var cacheKey = "dotFloat" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -822,7 +824,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_float(context) {
+      var parse_float = funcs['float'] = function parse_float(context) {
         var cacheKey = "float" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -882,7 +884,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_string(context) {
+      var parse_string = funcs['string'] = function parse_string(context) {
         var cacheKey = "string" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -961,7 +963,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_other(context) {
+      var parse_other = funcs['other'] = function parse_other(context) {
         var cacheKey = "other" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -1009,7 +1011,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_type(context) {
+      var parse_type = funcs['type'] = function parse_type(context) {
         var cacheKey = "type" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -1048,7 +1050,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_TypeDesc(context) {
+      var parse_TypeDesc = funcs['TypeDesc'] = function parse_TypeDesc(context) {
         var cacheKey = "TypeDesc" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -1081,7 +1083,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_Sequence(context) {
+      var parse_Sequence = funcs['Sequence'] = function parse_Sequence(context) {
         var cacheKey = "Sequence" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -1139,7 +1141,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_SimpleType(context) {
+      var parse_SimpleType = funcs['SimpleType'] = function parse_SimpleType(context) {
         var cacheKey = "SimpleType" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -1263,7 +1265,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_UnsignedIntegerType(context) {
+      var parse_UnsignedIntegerType = funcs['UnsignedIntegerType'] = function parse_UnsignedIntegerType(context) {
         var cacheKey = "UnsignedIntegerType" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -1380,7 +1382,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_ScopedNameList(context) {
+      var parse_ScopedNameList = funcs['ScopedNameList'] = function parse_ScopedNameList(context) {
         var cacheKey = "ScopedNameList" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -1423,7 +1425,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_ScopedNameListRest(context) {
+      var parse_ScopedNameListRest = funcs['ScopedNameListRest'] = function parse_ScopedNameListRest(context) {
         var cacheKey = "ScopedNameListRest" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -1479,7 +1481,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_ScopedName(context) {
+      var parse_ScopedName = funcs['ScopedName'] = function parse_ScopedName(context) {
         var cacheKey = "ScopedName" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -1512,7 +1514,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_AbsoluteScopedName(context) {
+      var parse_AbsoluteScopedName = funcs['AbsoluteScopedName'] = function parse_AbsoluteScopedName(context) {
         var cacheKey = "AbsoluteScopedName" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -1556,7 +1558,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_RelativeScopedName(context) {
+      var parse_RelativeScopedName = funcs['RelativeScopedName'] = function parse_RelativeScopedName(context) {
         var cacheKey = "RelativeScopedName" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -1597,7 +1599,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_ScopedNameRest(context) {
+      var parse_ScopedNameRest = funcs['ScopedNameRest'] = function parse_ScopedNameRest(context) {
         var cacheKey = "ScopedNameRest" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -1641,7 +1643,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_BooleanLiteral(context) {
+      var parse_BooleanLiteral = funcs['BooleanLiteral'] = function parse_BooleanLiteral(context) {
         var cacheKey = "BooleanLiteral" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -1690,7 +1692,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_Nullable(context) {
+      var parse_Nullable = funcs['Nullable'] = function parse_Nullable(context) {
         var cacheKey = "Nullable" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -1722,7 +1724,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_ReturnType(context) {
+      var parse_ReturnType = funcs['ReturnType'] = function parse_ReturnType(context) {
         var cacheKey = "ReturnType" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -1763,7 +1765,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_definitions(context) {
+      var parse_definitions = funcs['definitions'] = function parse_definitions(context) {
         var cacheKey = "definitions" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -1791,7 +1793,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_definition(context) {
+      var parse_definition = funcs['definition'] = function parse_definition(context) {
         var cacheKey = "definition" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -1839,7 +1841,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_module(context) {
+      var parse_module = funcs['module'] = function parse_module(context) {
         var cacheKey = "module" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -1981,7 +1983,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_implements(context) {
+      var parse_implements = funcs['implements'] = function parse_implements(context) {
         var cacheKey = "implements" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -2069,7 +2071,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_interface(context) {
+      var parse_interface = funcs['interface'] = function parse_interface(context) {
         var cacheKey = "interface" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -2229,7 +2231,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_ifInheritance(context) {
+      var parse_ifInheritance = funcs['ifInheritance'] = function parse_ifInheritance(context) {
         var cacheKey = "ifInheritance" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -2279,7 +2281,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_ifMember(context) {
+      var parse_ifMember = funcs['ifMember'] = function parse_ifMember(context) {
         var cacheKey = "ifMember" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -2312,7 +2314,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_const(context) {
+      var parse_const = funcs['const'] = function parse_const(context) {
         var cacheKey = "const" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -2446,7 +2448,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_constExpr(context) {
+      var parse_constExpr = funcs['constExpr'] = function parse_constExpr(context) {
         var cacheKey = "constExpr" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -2484,7 +2486,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_attrOrOp(context) {
+      var parse_attrOrOp = funcs['attrOrOp'] = function parse_attrOrOp(context) {
         var cacheKey = "attrOrOp" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -2522,7 +2524,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_Stringifier(context) {
+      var parse_Stringifier = funcs['Stringifier'] = function parse_Stringifier(context) {
         var cacheKey = "Stringifier" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -2601,7 +2603,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_Attribute(context) {
+      var parse_Attribute = funcs['Attribute'] = function parse_Attribute(context) {
         var cacheKey = "Attribute" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -2749,7 +2751,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_GetRaises(context) {
+      var parse_GetRaises = funcs['GetRaises'] = function parse_GetRaises(context) {
         var cacheKey = "GetRaises" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -2827,7 +2829,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_SetRaises(context) {
+      var parse_SetRaises = funcs['SetRaises'] = function parse_SetRaises(context) {
         var cacheKey = "SetRaises" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -2905,7 +2907,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_Operation(context) {
+      var parse_Operation = funcs['Operation'] = function parse_Operation(context) {
         var cacheKey = "Operation" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -2944,7 +2946,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_OmittableSpecials(context) {
+      var parse_OmittableSpecials = funcs['OmittableSpecials'] = function parse_OmittableSpecials(context) {
         var cacheKey = "OmittableSpecials" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -3000,7 +3002,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_Specials(context) {
+      var parse_Specials = funcs['Specials'] = function parse_Specials(context) {
         var cacheKey = "Specials" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -3166,7 +3168,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_OperationRest(context) {
+      var parse_OperationRest = funcs['OperationRest'] = function parse_OperationRest(context) {
         var cacheKey = "OperationRest" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -3301,7 +3303,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_Arguments(context) {
+      var parse_Arguments = funcs['Arguments'] = function parse_Arguments(context) {
         var cacheKey = "Arguments" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -3344,7 +3346,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_ArgumentsRest(context) {
+      var parse_ArgumentsRest = funcs['ArgumentsRest'] = function parse_ArgumentsRest(context) {
         var cacheKey = "ArgumentsRest" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -3400,7 +3402,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_Argument(context) {
+      var parse_Argument = funcs['Argument'] = function parse_Argument(context) {
         var cacheKey = "Argument" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -3512,7 +3514,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_Raises(context) {
+      var parse_Raises = funcs['Raises'] = function parse_Raises(context) {
         var cacheKey = "Raises" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -3602,7 +3604,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_typedef(context) {
+      var parse_typedef = funcs['typedef'] = function parse_typedef(context) {
         var cacheKey = "typedef" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -3690,7 +3692,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_exception(context) {
+      var parse_exception = funcs['exception'] = function parse_exception(context) {
         var cacheKey = "exception" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -3811,7 +3813,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_exMember(context) {
+      var parse_exMember = funcs['exMember'] = function parse_exMember(context) {
         var cacheKey = "exMember" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -3844,7 +3846,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_field(context) {
+      var parse_field = funcs['field'] = function parse_field(context) {
         var cacheKey = "field" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -3926,7 +3928,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_extendedAttributeList(context) {
+      var parse_extendedAttributeList = funcs['extendedAttributeList'] = function parse_extendedAttributeList(context) {
         var cacheKey = "extendedAttributeList" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -3996,7 +3998,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_ExtAttrs(context) {
+      var parse_ExtAttrs = funcs['ExtAttrs'] = function parse_ExtAttrs(context) {
         var cacheKey = "ExtAttrs" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -4039,7 +4041,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_ExtAttrsRest(context) {
+      var parse_ExtAttrsRest = funcs['ExtAttrsRest'] = function parse_ExtAttrsRest(context) {
         var cacheKey = "ExtAttrsRest" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -4095,7 +4097,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_ExtAttr(context) {
+      var parse_ExtAttr = funcs['ExtAttr'] = function parse_ExtAttr(context) {
         var cacheKey = "ExtAttr" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -4138,7 +4140,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_ExtAttrNoArg(context) {
+      var parse_ExtAttrNoArg = funcs['ExtAttrNoArg'] = function parse_ExtAttrNoArg(context) {
         var cacheKey = "ExtAttrNoArg" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -4161,7 +4163,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_ExtAttrNameValue(context) {
+      var parse_ExtAttrNameValue = funcs['ExtAttrNameValue'] = function parse_ExtAttrNameValue(context) {
         var cacheKey = "ExtAttrNameValue" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -4223,7 +4225,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_ExtAttrNamedArgList(context) {
+      var parse_ExtAttrNamedArgList = funcs['ExtAttrNamedArgList'] = function parse_ExtAttrNamedArgList(context) {
         var cacheKey = "ExtAttrNamedArgList" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -4338,7 +4340,7 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_ExtAttrArgList(context) {
+      var parse_ExtAttrArgList = funcs['ExtAttrArgList'] = function parse_ExtAttrArgList(context) {
         var cacheKey = "ExtAttrArgList" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
@@ -4478,7 +4480,7 @@ window.WebIDLParser = (function(){
       
       
       
-      var result = parse_definitions({ reportMatchFailures: true });
+      var result = funcs[start]({ reportMatchFailures: true });
       
       /*
        * The parser is now in one of the following three states:

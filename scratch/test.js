@@ -4,11 +4,16 @@ var sys = require("sys");
 
 try {
     var parser = require("WebIDLParser").Parser;
+    // sys.puts(
+    //     sys.inspect(
+    //         parser.parse(
+    //             require("fs").readFileSync(__dirname + "/test.idl")
+    //         ), false, null
+    //     )
+    // );
     sys.puts(
         sys.inspect(
-            parser.parse(
-                require("fs").readFileSync(__dirname + "/test.idl")
-            ), false, null
+            parser.parse("void doRobin (boolean testing, [Urgh] DOMString urgh);", "Operation"), false, null
         )
     );
 }
