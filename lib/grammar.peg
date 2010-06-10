@@ -53,6 +53,14 @@ float
     =   neg:"-"? num:(leadFloat / dotFloat / expFloat)
         { return neg + num; }
 
+string
+    =   '"' str:[^""]* '"'
+        { return str.join(""); }
+
+other
+    =   other:[^\t\n\r 0-9A-Z_a-z]+
+        { return other.join(""); }
+
 type
     =   type:TypeDesc nullable:Nullable
         {
@@ -123,13 +131,11 @@ definition
     =   def:(module / interface / implements / typedef / exception)
         { return def; }
 
+
+// module definition
 module
     =   extAttrs:extendedAttributeList? S? "module" S name:identifier w "{" w defs:definitions w "}" w ";" w
         { return { type: "module", name: name, definitions: defs, extAttrs: extAttrs }; }
-
-interface
-    =   extAttrs:extendedAttributeList? S? "interface" S name:identifier w herit:ifInheritance? w "{" w mem:ifMember* w "}" w ";" w
-        { return { type: "interface", name: name, inheritance: herit, members: mem, extAttrs: extAttrs }; }
 
 
 // implements definition
@@ -138,13 +144,11 @@ implements
         { return { type: 'implements', target: target, implements: impl }; }
 
 
-// extended attributes
-extendedAttributeList
-    =   "XXX"
-        { return []; }
-
-
 // interface definitions
+interface
+    =   extAttrs:extendedAttributeList? S? "interface" S name:identifier w herit:ifInheritance? w "{" w mem:ifMember* w "}" w ";" w
+        { return { type: "interface", name: name, inheritance: herit, members: mem, extAttrs: extAttrs }; }
+
 ifInheritance
     =   ":" w herit:ScopedNameList
         { return herit; }
@@ -252,83 +256,64 @@ field
         { return { type: "field", extAttrs: extAttrs, idlType: type, name: name }; }
 
 
+// extended attributes
+extendedAttributeList
+    =   w "[" ea:ExtAttrs "]" w
+        { return ea; }
 
-/*
-[37]	ExtendedAttributeList	→	"[" ExtendedAttribute ExtendedAttributes "]"
- | ε
-[38]	ExtendedAttributes	→	"," ExtendedAttribute ExtendedAttributes
- | ε
-[39]	ExtendedAttribute	→	"(" ExtendedAttributeInner ")" ExtendedAttributeRest
- | "[" ExtendedAttributeInner "]" ExtendedAttributeRest
- | "{" ExtendedAttributeInner "}" ExtendedAttributeRest
- | Other ExtendedAttributeRest
-[40]	ExtendedAttributeRest	→	ExtendedAttribute
- | ε
-[41]	ExtendedAttributeInner	→	"(" ExtendedAttributeInner ")" ExtendedAttributeInner
- | "[" ExtendedAttributeInner "]" ExtendedAttributeInner
- | "{" ExtendedAttributeInner "}" ExtendedAttributeInner
- | OtherOrComma ExtendedAttributeInner
- | ε
-[42]	Other	→	integer
- | float
- | identifier
- | string
- | other
- | "..."
- | ":"
- | "::"
- | ";"
- | "<"
- | "="
- | ">"
- | "?"
- | "false"
- | "object"
- | "true"
- | "any"
- | "attribute"
- | "boolean"
- | "caller"
- | "const"
- | "creator"
- | "deleter"
- | "double"
- | "exception"
- | "float"
- | "getraises"
- | "getter"
- | "implements"
- | "in"
- | "interface"
- | "long"
- | "module"
- | "octet"
- | "omittable"
- | "optional"
- | "raises"
- | "sequence"
- | "setraises"
- | "setter"
- | "short"
- | "DOMString"
- | "stringifier"
- | "typedef"
- | "unsigned"
- | "void"
-[43]	OtherOrComma	→	Other
- | ","
-[57]	ExtendedAttributeNoArg	→	identifier
-[58]	ExtendedAttributeArgList	→	identifier "(" ArgumentList ")"
-[59]	ExtendedAttributeIdent	→	identifier "=" identifier
-[60]	ExtendedAttributeScopedName	→	identifier "=" ScopedName
-[61]	ExtendedAttributeNamedArgList	→	identifier "=" identifier "(" ArgumentList ")"
-*/
+ExtAttrs
+    =   first:ExtAttr others:ExtAttrsRest*
+        {   var ret = [first];
+            for (var i = 0, n = others.length; i < n; i++) { ret.push(others[i]); }
+            return ret; }
+
+ExtAttrsRest
+    =   w "," w rest:ExtAttr
+        { return rest; }
+
+ExtAttr
+    =   ea:(ExtAttrArgList / ExtAttrNamedArgList / ExtAttrNameValue / ExtAttrNoArg)
+        { return ea; }
+
+ExtAttrNoArg
+    =   name:identifier
+        {return { name: name }; }
+
+ExtAttrNameValue
+    =   name:identifier w "=" w value:ScopedName
+        {return { name: name, value: value }; }
+
+ExtAttrNamedArgList
+    =   name:identifier w "=" w value:identifier w "(" w args:Arguments? w ")"
+        {return { name: name, value: value, arguments: args }; }
+
+ExtAttrNamedArgList
+    =   name:identifier w "=" w value:identifier w "(" w args:Arguments? w ")"
+        {return { name: name, value: value, arguments: args }; }
+
+ExtAttrArgList
+    =   name:identifier w "(" w args:Arguments? w ")"
+        {return { name: name, arguments: args }; }
 
 
-// basic bits
-// string   :   '"' [^""]* '"'
-//                 { return $2; }
-// whitespace   =   [\t\n\r ]+
-//                 { return ""; }
-// other        :   [^\t\n\r 0-9A-Z_a-z]
-//                 { return $1; }
+// these are the definitions as per spec, but they give me grief so instead we have the most common
+// ExtAttr types predefined — it might be saner in the long run anyway
+// ExtAttr
+//     =   ( "(" inParen:ExtAttr* ")" ) / ( "[" inSq:ExtAttr* "]" ) / ( "{" inCurl:ExtAttr* "}" ) / other:Other*
+//         {
+//             if (typeof inParen !== "undefined") return { type: "paren", content: inParen };
+//             if (typeof inSq !== "undefined") return { type: "square", content: inSq };
+//             if (typeof inCurl !== "undefined") return { type: "curly", content: inCurl };
+//             if (typeof other !== "undefined") return { type: "other", content: other };
+//         };
+// 
+// // this is too greedy
+// Other
+//     =   content:("," / "..." / "::" / ":" / ";" / "<" / ">" / "=" / "?" /
+//                  "false" / "true" / "object" / "any" / "attribute" / "boolean" / "caller" / "const" /
+//                  "creator" / "deleter" / "double" / "exception" / "float" / "getraises" / "setraises" /
+//                  "getter" / "setter" / "implements" / "in" / "interface" / "long" / "module" / "octet" /
+//                  "omittable" / "optional" / "raises" / "sequence" / "short" / "DOMString" / "stringifier" /
+//                  "typedef" / "unsigned" / "void" / float / integer / identifier / string / other
+//                  )
+//         { return content; }
