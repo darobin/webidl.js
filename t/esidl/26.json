@@ -1,7 +1,3 @@
-
-
-// ---- TEST NOT REVIEWED ----- 
-
 [
   {
     "type": "interface",
@@ -10,6 +6,7 @@
     "members": [
       {
         "type": "attribute",
+        "extAttrs": "",
         "idlType": {
           "sequence": false,
           "array": false,
@@ -23,6 +20,7 @@
       },
       {
         "type": "attribute",
+        "extAttrs": "",
         "idlType": {
           "sequence": false,
           "array": false,
@@ -36,6 +34,7 @@
       },
       {
         "type": "attribute",
+        "extAttrs": "",
         "idlType": {
           "sequence": false,
           "array": false,
@@ -49,6 +48,7 @@
       },
       {
         "type": "attribute",
+        "extAttrs": "",
         "idlType": {
           "sequence": false,
           "array": false,

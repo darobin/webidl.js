@@ -1,41 +1,40 @@
 var sys = require("sys"),
     fs  = require("fs"),
     wid = require(__dirname + "/../node/WebIDLParser").Parser,
+    _ = require("./underscore")._,
     peg = require(__dirname + "/../lib/peg").PEG;
 
 var specific = process.argv[2];
 if (specific) {
-    toJSON(specific);
+    testOne(specific);
 }
 else {
-    doAll();
+    testAll();
 }
 
-function doAll () {
+function testAll () {
     ["dom", "esidl"].forEach(function (targ) {
         var idls = fs.readdirSync(__dirname + "/" + targ)
                      .filter(function (it) { return /\.idl$/.test(it) })
                      .map(function (it) { return __dirname + "/" + targ + "/" + it; });
-        idls.forEach(toJSON);
+        idls.forEach(testOne);
     });
 }
 
-function toJSON (idl) {
+function testOne (idl) {
+    sys.puts("Testing  " + idl);
     var jsonPath = idl.replace(/\.idl$/, ".json");
-    sys.puts("Working on " + jsonPath);
+    var ref;
     try {
-        var st = fs.statSync(jsonPath);
-        if (st.isFile()) {
-            sys.puts("Skipping '" + idl + "', JSON exists.");
-        }
+        ref = JSON.parse(fs.readFileSync(jsonPath));
     }
-    catch (e) {}
+    catch (e) {
+        sys.puts("Could not parse reference, skipping: " + jsonPath);
+        return;
+    }
     try {
         var ast = wid.parse(fs.readFileSync(idl));
-        // var str = "\n\n// ---- TEST NOT REVIEWED ----- \n\n" + JSON.stringify(ast, null, "  ");
-        var str = JSON.stringify(ast, null, "  ");
-        fs.writeFileSync(jsonPath, str);
-        sys.puts("UNTESTED  " + jsonPath);
+        sys.puts(_.isEqual(ast, ref) ? "[OK]" : "### NOT OK ###");
     }
     catch (e) {
         sys.puts("ERROR parsing '" + idl + "': " + e + "\nline: " + e.line + ":" + e.column);
