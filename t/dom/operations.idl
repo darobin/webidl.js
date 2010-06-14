@@ -1,0 +1,38 @@
+interface NonSpecialOperationWithoutIdentifier {
+  DOMString();
+};
+
+interface OperationNameClashWithConstant {
+  const boolean right = false;
+  DOMString right();
+};
+
+interface OperationNameClashWithAttribute {
+  attribute boolean right;
+  DOMString right();
+};
+
+interface OperationSetRaisesUnknown {
+  boolean right() raises(UnknownException);
+}; 
+
+interface OperationWithNonLastVariadicArgument {
+  float multiply(float... numbers, float factor);
+}; 
+
+interface OperationWithOptionalArgumentInMiddle {
+  float multiply(optional float number, float number2);
+};
+
+exception KnownException {};
+
+interface ValidOperations {
+  stringifier DOMString();
+  getter DOMString(DOMString name);
+  DOMString right(DOMString input);
+  boolean right();
+  boolean wrong() raises(KnownException);
+  float multipy(float... numbers);
+  float factorize(float number, optional float number2, optional float number3);
+  float factorize2(float number, optional float number2, float... numbers);
+};

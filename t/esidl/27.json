@@ -1,0 +1,40 @@
+
+
+// ---- TEST NOT REVIEWED ----- 
+
+[
+  {
+    "type": "interface",
+    "name": "object",
+    "inheritance": "",
+    "members": [
+      {
+        "type": "attribute",
+        "idlType": {
+          "sequence": false,
+          "array": false,
+          "idlType": "long",
+          "nullable": false
+        },
+        "name": "x",
+        "readonly": false,
+        "getraises": "",
+        "setraises": ""
+      },
+      {
+        "type": "attribute",
+        "idlType": {
+          "sequence": false,
+          "array": false,
+          "idlType": "object",
+          "nullable": false
+        },
+        "name": "_object",
+        "readonly": false,
+        "getraises": "",
+        "setraises": ""
+      }
+    ],
+    "extAttrs": ""
+  }
+]

@@ -1,0 +1,41 @@
+
+
+// ---- TEST NOT REVIEWED ----- 
+
+[
+  {
+    "type": "exception",
+    "name": "E",
+    "members": [
+      {
+        "type": "field",
+        "extAttrs": "",
+        "idlType": {
+          "sequence": false,
+          "array": false,
+          "idlType": "short",
+          "nullable": false
+        },
+        "name": "code"
+      }
+    ]
+  },
+  {
+    "type": "interface",
+    "name": "A",
+    "inheritance": "",
+    "members": [
+      {
+        "type": "operation",
+        "idlType": "void",
+        "name": "op",
+        "arguments": [],
+        "raises": [
+          "E"
+        ],
+        "omittable": false
+      }
+    ],
+    "extAttrs": ""
+  }
+]

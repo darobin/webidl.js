@@ -131,11 +131,11 @@ ReturnType
 
 // higher-level structure
 definitions
-    =   defs:definition*
+    =   w defs:definition*
         { return defs; }
 
 definition
-    =   def:(module / interface / implements / typedef / exception)
+    =   def:(module / interface / typedef / exception / implements)
         { return def; }
 
 
@@ -187,38 +187,38 @@ Stringifier
         }
 
 Attribute
-    =   w ro:("readonly" S)? "attribute" S type:type S name:identifier w gr:GetRaises? w sr:SetRaises? w ";" w
-        { return { type: "attribute", idlType: type, name: name, readonly: (ro ? true : false), getraises: gr, setraises: sr }; }
+    =   extAttrs:extendedAttributeList? w ro:("readonly" S)? "attribute" S type:type S name:identifier w gr:GetRaises? w sr:SetRaises? w ";" w
+        { return { type: "attribute", extAttrs: extAttrs, idlType: type, name: name, readonly: (ro ? true : false), getraises: gr, setraises: sr }; }
 
 GetRaises
-    =   "getraises" S "(" list:ScopedNameList ")"
+    =   "getraises" w "(" list:ScopedNameList ")"
         { return list; }
 
 SetRaises
-    =   "setraises" S "(" list:ScopedNameList ")"
+    =   "setraises" w "(" list:ScopedNameList ")"
         { return list; }
 
 Operation
-    =   oms:OmittableSpecials rest:OperationRest
+    =   extAttrs:extendedAttributeList? w oms:OmittableSpecials w rest:OperationRest
         {
             for (var k in oms) rest[k] = oms[k];
+            if (extAttrs) rest.extAttrs = extAttrs;
             return rest;
         }
 
 OmittableSpecials
-    =   om:"omittable"? w spe:Specials?
-        {
-            if (!spe) spe = {};
-            spe.omittable = (om ? true : false);
-            return spe;
-        }
-
-Specials
-    =   spe:("getter" / "setter" / "creator" / "deleter" / "caller")+
+    =   om:"omittable"? w spe:Specials*
         {
             var ret = {};
             for (var i = 0, n = spe.length; i < n; i++) { ret[spe[i]] = true; }
+            ret.omittable = (om ? true : false);
             return ret;
+        }
+
+Specials
+    =   w spe:("getter" / "setter" / "creator" / "deleter" / "caller") w
+        {
+            return spe;
         }
 
 OperationRest
@@ -251,8 +251,8 @@ typedef
 
 // exception definition
 exception
-    =   "exception" S name:identifier w "{" mem:exMember* "}" w ";" w
-        { return { type: 'exception', name: name, members: mem }; }
+    =   extAttrs:extendedAttributeList? w "exception" S name:identifier w "{" w mem:exMember* w "}" w ";" w
+        { return { type: 'exception', name: name, members: mem, extAttrs: extAttrs }; }
 
 exMember
     =   mem:(const / field)

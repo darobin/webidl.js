@@ -1,0 +1,57 @@
+
+
+// ---- TEST NOT REVIEWED ----- 
+
+[
+  {
+    "type": "module",
+    "name": "X",
+    "definitions": [
+      {
+        "type": "interface",
+        "name": "A",
+        "inheritance": "",
+        "members": [
+          {
+            "type": "attribute",
+            "idlType": {
+              "sequence": false,
+              "array": false,
+              "idlType": "long",
+              "nullable": false
+            },
+            "name": "a",
+            "readonly": false,
+            "getraises": "",
+            "setraises": ""
+          }
+        ],
+        "extAttrs": ""
+      },
+      {
+        "type": "interface",
+        "name": "B",
+        "inheritance": [
+          "Y::C"
+        ],
+        "members": [
+          {
+            "type": "attribute",
+            "idlType": {
+              "sequence": false,
+              "array": false,
+              "idlType": "long",
+              "nullable": false
+            },
+            "name": "b",
+            "readonly": false,
+            "getraises": "",
+            "setraises": ""
+          }
+        ],
+        "extAttrs": ""
+      }
+    ],
+    "extAttrs": ""
+  }
+]

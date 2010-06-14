@@ -1,0 +1,72 @@
+
+
+// ---- TEST NOT REVIEWED ----- 
+
+[
+  {
+    "type": "interface",
+    "name": "A",
+    "inheritance": "",
+    "members": [
+      {
+        "type": "attribute",
+        "idlType": {
+          "sequence": false,
+          "array": false,
+          "idlType": "long",
+          "nullable": false
+        },
+        "name": "a",
+        "readonly": false,
+        "getraises": "",
+        "setraises": ""
+      }
+    ],
+    "extAttrs": ""
+  },
+  {
+    "type": "interface",
+    "name": "B",
+    "inheritance": "",
+    "members": [
+      {
+        "type": "attribute",
+        "idlType": {
+          "sequence": false,
+          "array": false,
+          "idlType": "long",
+          "nullable": false
+        },
+        "name": "b",
+        "readonly": false,
+        "getraises": "",
+        "setraises": ""
+      }
+    ],
+    "extAttrs": ""
+  },
+  {
+    "type": "interface",
+    "name": "X",
+    "inheritance": [
+      "A",
+      "B"
+    ],
+    "members": [
+      {
+        "type": "attribute",
+        "idlType": {
+          "sequence": false,
+          "array": false,
+          "idlType": "long",
+          "nullable": false
+        },
+        "name": "x",
+        "readonly": false,
+        "getraises": "",
+        "setraises": ""
+      }
+    ],
+    "extAttrs": ""
+  }
+]

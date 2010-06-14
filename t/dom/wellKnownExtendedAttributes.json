@@ -1,0 +1,20 @@
+
+
+// ---- TEST NOT REVIEWED ----- 
+
+[
+  {
+    "type": "interface",
+    "name": "UseUnknownExtendedAttribute",
+    "inheritance": "",
+    "members": [],
+    "extAttrs": [
+      {
+        "name": "Unknown"
+      },
+      {
+        "name": "PrototypeRoot"
+      }
+    ]
+  }
+]
