@@ -1,5 +1,5 @@
-UNTESTED  /Projects/W3C/webidl.js/t/dom/attributes.json
-UNTESTED  /Projects/W3C/webidl.js/t/dom/callbackExtendedAttribute.json
+OK		  /Projects/W3C/webidl.js/t/dom/attributes.json
+OK		  /Projects/W3C/webidl.js/t/dom/callbackExtendedAttribute.json
 OK		  /Projects/W3C/webidl.js/t/dom/constants.json
 UNTESTED  /Projects/W3C/webidl.js/t/dom/constructorExtendedAttribute.json
 UNTESTED  /Projects/W3C/webidl.js/t/dom/definedTypes.json
