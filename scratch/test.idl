@@ -24,7 +24,12 @@
 [RestPOST, RestID=foo]
 module bar {
     interface Drink {
+        const Test life = true;
         readonly attribute any[] drinks;
         Beer[] order (Euro[] money);
+    };
+    exception Boom {
+        const Test life = true;
+        DOMString message;
     };
 };

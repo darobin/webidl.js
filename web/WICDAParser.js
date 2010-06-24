@@ -1216,7 +1216,7 @@ window.WICDAParser = (function(){
               }
             }
             if (result4 !== null) {
-              var result9 = parse_Params(context);
+              var result9 = parse_Arguments(context);
               var result5 = result9 !== null ? result9 : '';
               if (result5 !== null) {
                 if (input.substr(pos, 1) === ")") {
@@ -1229,7 +1229,7 @@ window.WICDAParser = (function(){
                   }
                 }
                 if (result6 !== null) {
-                  var result8 = parse_ParamStep(context);
+                  var result8 = parse_ArgumentStep(context);
                   var result7 = result8 !== null ? result8 : '';
                   if (result7 !== null) {
                     var result1 = [result2, result3, result4, result5, result6, result7];
@@ -1258,9 +1258,9 @@ window.WICDAParser = (function(){
           pos = savedPos0;
         }
         var result0 = result1 !== null
-          ? (function(name, params, param) {
-                      var ret = { step: "operation", name: name, params: params };
-                      if (param) return [ret, param];
+          ? (function(name, args, arg) {
+                      var ret = { step: "operation", name: name, arguments: args };
+                      if (arg) return [ret, arg];
                       else return ret;
                   })(result1[1], result1[3], result1[5])
           : null;
@@ -1318,8 +1318,8 @@ window.WICDAParser = (function(){
         return result0;
       }
       
-      var parse_Params = funcs['Params'] = function parse_Params(context) {
-        var cacheKey = "Params" + '@' + pos;
+      var parse_Arguments = funcs['Arguments'] = function parse_Arguments(context) {
+        var cacheKey = "Arguments" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
           pos = cachedResult.nextPos;
@@ -1331,10 +1331,10 @@ window.WICDAParser = (function(){
         var result2 = parse_Type(context);
         if (result2 !== null) {
           var result3 = [];
-          var result4 = parse_ParamsRest(context);
+          var result4 = parse_ArgumentsRest(context);
           while (result4 !== null) {
             result3.push(result4);
-            var result4 = parse_ParamsRest(context);
+            var result4 = parse_ArgumentsRest(context);
           }
           if (result3 !== null) {
             var result1 = [result2, result3];
@@ -1361,8 +1361,8 @@ window.WICDAParser = (function(){
         return result0;
       }
       
-      var parse_ParamsRest = funcs['ParamsRest'] = function parse_ParamsRest(context) {
-        var cacheKey = "ParamsRest" + '@' + pos;
+      var parse_ArgumentsRest = funcs['ArgumentsRest'] = function parse_ArgumentsRest(context) {
+        var cacheKey = "ArgumentsRest" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
           pos = cachedResult.nextPos;
@@ -1405,8 +1405,8 @@ window.WICDAParser = (function(){
         return result0;
       }
       
-      var parse_ParamStep = funcs['ParamStep'] = function parse_ParamStep(context) {
-        var cacheKey = "ParamStep" + '@' + pos;
+      var parse_ArgumentStep = funcs['ArgumentStep'] = function parse_ArgumentStep(context) {
+        var cacheKey = "ArgumentStep" + '@' + pos;
         var cachedResult = cache[cacheKey];
         if (cachedResult) {
           pos = cachedResult.nextPos;
@@ -1415,13 +1415,13 @@ window.WICDAParser = (function(){
         
         
         var savedPos0 = pos;
-        if (input.substr(pos, 7) === "/param:") {
-          var result2 = "/param:";
-          pos += 7;
+        if (input.substr(pos, 10) === "/argument:") {
+          var result2 = "/argument:";
+          pos += 10;
         } else {
           var result2 = null;
           if (context.reportMatchFailures) {
-            matchFailed(quoteString("/param:"));
+            matchFailed(quoteString("/argument:"));
           }
         }
         if (result2 !== null) {
@@ -1437,7 +1437,7 @@ window.WICDAParser = (function(){
           pos = savedPos0;
         }
         var result0 = result1 !== null
-          ? (function(name) { return { step: "param", name: name }; })(result1[1])
+          ? (function(name) { return { step: "argument", name: name }; })(result1[1])
           : null;
         
         

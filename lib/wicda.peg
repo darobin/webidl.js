@@ -108,10 +108,10 @@ AttributeStep
         { return { step: "attribute", name: name }; }
 
 OperationStep
-    =   "/operation:" name:identifier "(" params:Params? ")" param:ParamStep?
+    =   "/operation:" name:identifier "(" args:Arguments? ")" arg:ArgumentStep?
         {
-            var ret = { step: "operation", name: name, params: params };
-            if (param) return [ret, param];
+            var ret = { step: "operation", name: name, arguments: args };
+            if (arg) return [ret, arg];
             else return ret;
         }
 
@@ -119,17 +119,17 @@ FieldStep
     =   "/field:" name:identifier
         { return { step: "field", name: name }; }
 
-Params
-    =   first:Type others:ParamsRest*
+Arguments
+    =   first:Type others:ArgumentsRest*
         {   var ret = [first];
             for (var i = 0, n = others.length; i < n; i++) { ret.push(others[i]); }
             return ret; }
 
-ParamsRest
+ArgumentsRest
     =   "," rest:Type
         { return rest; }
 
-ParamStep
-    =   "/param:" name:identifier
-        { return { step: "param", name: name }; }
+ArgumentStep
+    =   "/argument:" name:identifier
+        { return { step: "argument", name: name }; }
 

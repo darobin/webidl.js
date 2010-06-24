@@ -8,7 +8,7 @@ try {
     sys.puts("starting");
     sys.puts(
         sys.inspect(
-            parser.parse("/module:Cryptids/interface:Dahut/operation:graze(float,DOMString)/param:volume"), false, null
+            parser.parse("/module:Cryptids/interface:Dahut/operation:graze(float,DOMString)/argument:volume"), false, null
         )
     );
 }
