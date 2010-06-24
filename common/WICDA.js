@@ -56,17 +56,17 @@
                     case "module":
                     case "interface":
                     case "exception":
-                        if (ctx.type !=== "module") return;
+                        if (ctx.type !== "module") return;
                         var ret = WICDA._typeName(ctx.definitions, type, step.name);
                         if (ret) ctx = ret;
                         else return;
                         break;
                     case "typedef":
-                        if (ctx.type !=== "module") return;
+                        if (ctx.type !== "module") return;
                         return WICDA._typeName(ctx.definitions, type, step.name);
                         break;
                     case "implements":
-                        if (ctx.type !=== "module") return;
+                        if (ctx.type !== "module") return;
                         for (var i = 0, n = ctx.definitions.length; i < n; i++) {
                             var imp = ctx.definitions[i];
                             if (imp.type == "implements" && imp.target == step.target && imp.source == step.source) return imp;
@@ -74,19 +74,19 @@
                         return;
                         break;
                     case "constant":
-                        if (ctx.type !=== "interface" && ctx.type !=== "exception") return;
+                        if (ctx.type !== "interface" && ctx.type !== "exception") return;
                         return WICDA._typeName(ctx.members, type, step.name);
                         break;
                     case "attribute":
-                        if (ctx.type !=== "interface") return;
+                        if (ctx.type !== "interface") return;
                         return WICDA._typeName(ctx.members, type, step.name);
                         break;
                     case "field":
-                        if (ctx.type !=== "exception") return;
+                        if (ctx.type !== "exception") return;
                         return WICDA._typeName(ctx.members, type, step.name);
                         break;
                     case "argument":
-                        if (ctx.type !=== "operation") return;
+                        if (ctx.type !== "operation") return;
                         if (!ctx.arguments) return;
                         for (var i = 0, n = ctx.arguments.length; i < n; i++) {
                             var arg = ctx.arguments[i];
@@ -95,7 +95,7 @@
                         return;
                         break;
                     case "operation":
-                        if (ctx.type !=== "interface") return;
+                        if (ctx.type !== "interface") return;
                         for (var i = 0, n = ctx.members.length; i < n; i++) {
                             var op = ctx.members[i];
                             if (op.type == "operation" && op.name == step.name && op.arguments.length == step.arguments.length) {

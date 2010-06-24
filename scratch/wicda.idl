@@ -1,0 +1,31 @@
+
+module one {
+    [Existing, Extended, Attribute]
+    module two {
+        interface Dahut {
+            const boolean cool = true;
+            readonly attribute DOMString chirality;
+            void run (DOMString first, unsigned long long second);
+        };
+        exception Boom {
+            const long answer = 42;
+            DOMString message;
+        };
+    };
+    typedef Sweet Rocking::Chair;
+    Robin implements Coolness;
+};
+
+interface Dahut {
+    const boolean cool = true;
+    readonly attribute DOMString chirality;
+    void run (DOMString first, unsigned long long second);
+};
+exception Boom {
+    const long answer = 42;
+    DOMString message;
+};
+
+typedef Sweet Rocking::Chair;
+[Existing, Extended, Attribute]
+Robin implements Coolness;

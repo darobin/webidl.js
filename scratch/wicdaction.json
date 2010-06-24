@@ -1,0 +1,28 @@
+{
+    "name": "Test WICDA",
+    "description": "Nothing useful beyond testing",
+    "actions": [
+        { "action": "addExtAttr", "path": "/module:one", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/module:one/module:two", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/module:one/module:two/interface:Dahut", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/module:one/module:two/interface:Dahut/constant:cool", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/module:one/module:two/interface:Dahut/attribute:chirality", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/module:one/module:two/interface:Dahut/operation:run", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/module:one/module:two/interface:Dahut/operation:run/param:second", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/module:one/module:two/exception:Boom", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/module:one/module:two/exception:Boom/constant:answer", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/module:one/module:two/exception:Boom/field:message", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/module:one/typedef:Sweet", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/module:one/implements:Robin(Coolness)", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/interface:Dahut", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/interface:Dahut/constant:cool", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/interface:Dahut/attribute:chirality", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/interface:Dahut/operation:run", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/interface:Dahut/operation:run/param:second", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/exception:Boom", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/exception:Boom/constant:answer", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/exception:Boom/field:message", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/typedef:Sweet", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/implements:Robin(Coolness)", "value": "[Added]" },
+    ]
+}
