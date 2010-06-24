@@ -17,10 +17,7 @@
     var WICDA = {
         applySheet: function (sheet, webidl) {
             if (typeof webidl === "string") {
-                try {
-                    webidl = widlp.parse(webidl);
-                }
-                catch (e) { return; }
+                webidl = widlp.parse(webidl);
             }
             if (!sheet.actions) return webidl;
             for (var i = 0, n = sheet.actions.length; i < n; i++) {

@@ -23,6 +23,6 @@
         { "action": "addExtAttr", "path": "/exception:Boom/constant:answer", "value": "[Added]" },
         { "action": "addExtAttr", "path": "/exception:Boom/field:message", "value": "[Added]" },
         { "action": "addExtAttr", "path": "/typedef:Sweet", "value": "[Added]" },
-        { "action": "addExtAttr", "path": "/implements:Robin(Coolness)", "value": "[Added]" },
+        { "action": "addExtAttr", "path": "/implements:Robin(Coolness)", "value": "[Added]" }
     ]
 }

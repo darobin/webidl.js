@@ -23,5 +23,6 @@ try {
     sys.puts(sys.inspect(res, false, null));
 }
 catch (e) {
-    sys.p(e);
+    sys.puts(e.message + "\n" + e.stack);
+    // sys.puts(e.message);
 }

@@ -12,7 +12,7 @@ module one {
             DOMString message;
         };
     };
-    typedef Sweet Rocking::Chair;
+    typedef Rocking::Chair Sweet;
     Robin implements Coolness;
 };
 
@@ -26,6 +26,7 @@ exception Boom {
     DOMString message;
 };
 
-typedef Sweet Rocking::Chair;
+typedef Rocking::Chair Sweet;
+
 [Existing, Extended, Attribute]
 Robin implements Coolness;

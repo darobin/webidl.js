@@ -21,6 +21,7 @@
 //     };
 // };
 // 
+Foo implements Bar;
 [RestPOST, RestID=foo]
 module bar {
     interface Drink {

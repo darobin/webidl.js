@@ -147,8 +147,8 @@ module
 
 // implements definition
 implements
-    =   target:ScopedName S "implements" S impl:ScopedName w ";" w
-        { return { type: 'implements', target: target, 'implements': impl }; }
+    =   extAttrs:extendedAttributeList? S? target:ScopedName S "implements" S impl:ScopedName w ";" w
+        { return { type: 'implements', target: target, 'implements': impl, extAttrs: extAttrs }; }
 
 
 // interface definitions

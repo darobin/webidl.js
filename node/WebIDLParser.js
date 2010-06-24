@@ -2058,39 +2058,53 @@ exports.Parser = (function(){
         
         
         var savedPos0 = pos;
-        var result2 = parse_ScopedName(context);
+        var result13 = parse_extendedAttributeList(context);
+        var result2 = result13 !== null ? result13 : '';
         if (result2 !== null) {
-          var result3 = parse_s(context);
+          var result12 = parse_s(context);
+          var result3 = result12 !== null ? result12 : '';
           if (result3 !== null) {
-            if (input.substr(pos, 10) === "implements") {
-              var result4 = "implements";
-              pos += 10;
-            } else {
-              var result4 = null;
-              if (context.reportMatchFailures) {
-                matchFailed(quoteString("implements"));
-              }
-            }
+            var result4 = parse_ScopedName(context);
             if (result4 !== null) {
               var result5 = parse_s(context);
               if (result5 !== null) {
-                var result6 = parse_ScopedName(context);
+                if (input.substr(pos, 10) === "implements") {
+                  var result6 = "implements";
+                  pos += 10;
+                } else {
+                  var result6 = null;
+                  if (context.reportMatchFailures) {
+                    matchFailed(quoteString("implements"));
+                  }
+                }
                 if (result6 !== null) {
-                  var result7 = parse_w(context);
+                  var result7 = parse_s(context);
                   if (result7 !== null) {
-                    if (input.substr(pos, 1) === ";") {
-                      var result8 = ";";
-                      pos += 1;
-                    } else {
-                      var result8 = null;
-                      if (context.reportMatchFailures) {
-                        matchFailed(quoteString(";"));
-                      }
-                    }
+                    var result8 = parse_ScopedName(context);
                     if (result8 !== null) {
                       var result9 = parse_w(context);
                       if (result9 !== null) {
-                        var result1 = [result2, result3, result4, result5, result6, result7, result8, result9];
+                        if (input.substr(pos, 1) === ";") {
+                          var result10 = ";";
+                          pos += 1;
+                        } else {
+                          var result10 = null;
+                          if (context.reportMatchFailures) {
+                            matchFailed(quoteString(";"));
+                          }
+                        }
+                        if (result10 !== null) {
+                          var result11 = parse_w(context);
+                          if (result11 !== null) {
+                            var result1 = [result2, result3, result4, result5, result6, result7, result8, result9, result10, result11];
+                          } else {
+                            var result1 = null;
+                            pos = savedPos0;
+                          }
+                        } else {
+                          var result1 = null;
+                          pos = savedPos0;
+                        }
                       } else {
                         var result1 = null;
                         pos = savedPos0;
@@ -2124,7 +2138,7 @@ exports.Parser = (function(){
           pos = savedPos0;
         }
         var result0 = result1 !== null
-          ? (function(target, impl) { return { type: 'implements', target: target, 'implements': impl }; })(result1[0], result1[4])
+          ? (function(extAttrs, target, impl) { return { type: 'implements', target: target, 'implements': impl, extAttrs: extAttrs }; })(result1[0], result1[2], result1[6])
           : null;
         
         
