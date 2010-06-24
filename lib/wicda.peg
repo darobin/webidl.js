@@ -1,0 +1,135 @@
+
+// PEG.js grammar for Web IDL Component Designators and Action
+
+// change this as we define more things
+start = wicd
+
+// white space
+s
+  = [ \t\r\n\f]+
+w
+  = s?
+S "whitespace"
+  = s
+
+// stuff from WebIDL
+identifier
+    =   nmstart:[A-Z_a-z] nmchars:[0-9A-Z_a-z]*
+        { return nmstart + nmchars.join(""); }
+
+Type
+    =   type:("any" / "object" / "boolean" / "octet" / "float" / "double" / "DOMString" / UnsignedIntegerType / ScopedName)
+        { return type; }
+
+UnsignedIntegerType
+    =   uns:"unsigned"? S kind:(("long" S "long") / "long" / "short")
+        { return (uns ? "unsigned " : "") + (kind.join ? kind.join("") : kind); }
+
+ScopedNameList
+    =   first:ScopedName others:ScopedNameListRest*
+        {   var ret = [first];
+            for (var i = 0, n = others.length; i < n; i++) { ret.push(others[i]); }
+            return ret; }
+
+ScopedNameListRest
+    =   w "," w rest:ScopedName
+        { return rest; }
+
+ScopedName
+    =   name:(AbsoluteScopedName / RelativeScopedName)
+        { return name; }
+
+AbsoluteScopedName
+    =   "::" rel:RelativeScopedName
+        { return "::" + rel; }
+
+RelativeScopedName
+    =   name:identifier rest:ScopedNameRest*
+        { return name + rest.join(""); }
+
+ScopedNameRest
+    =   name:("::" identifier)
+        { return name.join(""); }
+
+// actual paths
+wicd
+    =   mods:ModuleStep* rest:OtherStep*
+        {
+            function isArray (obj) { return !!(obj && obj.concat && obj.unshift && !obj.callee); }
+            function flatten (arr) {
+                if (!isArray(arr)) return;
+                for (var i = 0, n = arr.length; i < n; i++) {
+                    if (isArray(arr[i])) flatten(arr[i]);
+                    else mods.push(arr[i]);
+                }
+            }
+            flatten(rest);
+            return mods;
+        }
+
+OtherStep
+    =   step:(InterfaceStep / ExceptionStep / TypeDefStep / ImplementsStep)
+        { return step; }
+
+ModuleStep
+    =   "/module:" name:identifier
+        { return { step: "module", name: name }; }
+
+InterfaceStep
+    =   "/interface:" name:identifier subs:(ConstantStep / AttributeStep / OperationStep)?
+        {
+            var ret = { step: "interface", name: name };
+            if (subs) return [ret, subs];
+            else return ret;
+        }
+
+ExceptionStep
+    =   "/exception:" name:identifier subs:(ConstantStep / FieldStep)?
+        {
+            var ret = { step: "exception", name: name };
+            if (subs) return [ret, subs];
+            else return ret;
+        }
+
+TypeDefStep
+    =   "/typedef:" name:identifier
+        { return { step: "typedef", name: name }; }
+
+ImplementsStep
+    =   "/implements:" target:ScopedName "(" source:ScopedName ")"
+        { return { step: "implements", target: target, source: source }; }
+
+ConstantStep
+    =   "/constant:" name:identifier
+        { return { step: "constant", name: name }; }
+
+AttributeStep
+    =   "/attribute:" name:identifier
+        { return { step: "attribute", name: name }; }
+
+OperationStep
+    =   "/operation:" name:identifier "(" params:Params? ")" param:ParamStep?
+        {
+            var ret = { step: "operation", name: name, params: params };
+            if (param) return [ret, param];
+            else return ret;
+        }
+
+FieldStep
+    =   "/field:" name:identifier
+        { return { step: "field", name: name }; }
+
+Params
+    =   first:Type others:ParamsRest*
+        {   var ret = [first];
+            for (var i = 0, n = others.length; i < n; i++) { ret.push(others[i]); }
+            return ret; }
+
+ParamsRest
+    =   "," rest:Type
+        { return rest; }
+
+ParamStep
+    =   "/param:" name:identifier
+        { return { step: "param", name: name }; }
+
