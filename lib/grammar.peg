@@ -88,8 +88,12 @@ ArrayType
         }
 
 SimpleType
-    =   type:("any" / "object" / "boolean" / "octet" / "float" / "double" / "DOMString" / UnsignedIntegerType / ScopedName)
+    =   type:(PrimitiveType / UnsignedIntegerType / ScopedName)
         { return { sequence: false, array: false, idlType: type }; }
+
+PrimitiveType
+    =   type:("any" / "object" / "boolean" / "octet" / "float" / "double" / "DOMString") ![A-Za-z0-9]
+        { return type; }
 
 UnsignedIntegerType
     =   uns:"unsigned"? S kind:(("long" S "long") / "long" / "short")
