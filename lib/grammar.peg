@@ -4,9 +4,13 @@
 // change this as we define more things
 start = definitions
 
+
 // white space
+space 
+  = " " / "\t" / "\r" / "\n" / "\f" / ("//" [^\n]* "\n")
 s
-  = [ \t\r\n\f]+
+  = space+
+//  = [ \t\r\n\f]+
 w
   = s?
 S "whitespace"
@@ -84,8 +88,12 @@ ArrayType
         }
 
 SimpleType
-    =   type:("any" / "object" / "boolean" / "octet" / "float" / "double" / "DOMString" / UnsignedIntegerType / ScopedName)
+    =   type:(PrimitiveType / UnsignedIntegerType / ScopedName)
         { return { sequence: false, array: false, idlType: type }; }
+
+PrimitiveType
+    =   type:("any" / "object" / "boolean" / "octet" / "float" / "double" / "DOMString") ![A-Za-z0-9]
+        { return type; }
 
 UnsignedIntegerType
     =   uns:"unsigned"? S kind:(("long" S "long") / "long" / "short")
@@ -135,7 +143,7 @@ definitions
         { return defs; }
 
 definition
-    =   def:(module / interface / typedef / exception / implements)
+    =   def:(module / interface / dictionary / typedef / exception / implements)
         { return def; }
 
 
@@ -242,6 +250,35 @@ Argument
 Raises
     =   "raises" S "(" w list:ScopedNameList w ")"
         { return list; }
+
+// dictionary definition
+dictionary
+    =   "dictionary" S name:identifier w superclass:ifInheritance? w "{"
+            w members:dictionaryMember* w "}" w ";" w
+            {
+                return { 
+                    type: "dictionary",
+                    name: name,
+                    inheritance: superclass,
+                    members: members
+                };
+            }           
+
+dictionaryMember 
+    =    extAttrs:extendedAttributeList? w type:type S name:identifier
+         w defaultValue:defaultValue? w ";" w
+         {
+             return {
+                 type: type,
+                 name: name,
+                 defaultValue: defaultValue
+             };
+         }
+
+
+defaultValue
+    =   "=" w value:constExpr
+        { return value; }
 
 
 // typedef definition
