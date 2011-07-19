@@ -29,9 +29,12 @@ The grammar isn't exactly the one in the WebIDL draft. In some places it is slig
 by that much though), and its handling of extended attributes is simpler. It also adds support for WebIDL
 arrays, even though they are not described in the current draft's grammar.
 
-If you wish modify the grammar, which is in lib/grammar.peg, go through the following steps:
+The parser code is created with the pegjs parser generator from the
+grammar in lib/grammar.peg. To modify the grammar:
 
-	- read up on PEG.js at http://pegjs.majda.cz/
-	- create a directory at the root of this repository called depends
-	- inside depends, git clone git://github.com/dmajda/pegjs.git
-	- then run node utils/generate.js to regenerate the JS
+        - read up on PEG.js at http://pegjs.majda.cz/
+        - install node and npm
+        - install pegjs with node install -g pegjs
+        - run 'make parsers' in the top-level directory. (This assumes
+          that you're in a Unix-like environment with make and sed installed.)
+
