@@ -26,14 +26,14 @@ function testOne (idl) {
     var jsonPath = idl.replace(/\.idl$/, ".json");
     var ref;
     try {
-        ref = JSON.parse(fs.readFileSync(jsonPath));
+        ref = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
     }
     catch (e) {
         sys.puts("Could not parse reference, skipping: " + jsonPath);
         return;
     }
     try {
-        var ast = wid.parse(fs.readFileSync(idl));
+        var ast = wid.parse(fs.readFileSync(idl, 'utf-8'));
         sys.puts(_.isEqual(ast, ref) ? "[OK]" : "### NOT OK ###");
     }
     catch (e) {
