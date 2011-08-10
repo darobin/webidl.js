@@ -34,7 +34,12 @@ function testOne (idl) {
     }
     try {
         var ast = wid.parse(fs.readFileSync(idl, 'utf-8'));
-        sys.puts(_.isEqual(ast, ref) ? "[OK]" : "### NOT OK ###");
+        if (_.isEqual(ast, ref)) {
+            sys.puts("[OK]");
+        } else {
+            sys.puts("### NOT OK ###");
+            fs.writeFileSync(jsonPath + '.fail', JSON.stringify(ast, null, "  "));
+        }
     }
     catch (e) {
         sys.puts("ERROR parsing '" + idl + "': " + e + "\nline: " + e.line + ":" + e.column);
