@@ -132,7 +132,8 @@
   {
     "type": "implements",
     "target": "Y",
-    "implements": "Z2"
+    "implements": "Z2",
+    "extAttrs": ""
   },
   {
     "type": "interface",
@@ -159,6 +160,7 @@
   {
     "type": "implements",
     "target": "Y",
-    "implements": "Z3"
+    "implements": "Z3",
+    "extAttrs": ""
   }
 ]

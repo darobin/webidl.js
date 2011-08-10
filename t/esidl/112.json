@@ -18,7 +18,8 @@
   {
     "type": "implements",
     "target": "X",
-    "implements": "Y"
+    "implements": "Y",
+    "extAttrs": ""
   },
   {
     "type": "interface",
