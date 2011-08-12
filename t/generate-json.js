@@ -31,7 +31,7 @@ function toJSON (idl) {
     }
     catch (e) {}
     try {
-        var ast = wid.parse(fs.readFileSync(idl));
+        var ast = wid.parse(fs.readFileSync(idl, 'utf-8'));
         // var str = "\n\n// ---- TEST NOT REVIEWED ----- \n\n" + JSON.stringify(ast, null, "  ");
         var str = JSON.stringify(ast, null, "  ");
         fs.writeFileSync(jsonPath, str);

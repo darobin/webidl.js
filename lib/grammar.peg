@@ -6,8 +6,8 @@ start = definitions
 
 
 // white space
-space 
-  = " " / "\t" / "\r" / "\n" / "\f" / ("//" [^\n]* "\n")
+space
+  = " " / "\t" / "\r" / "\n" / "\f" / ("//" [^\n]* "\n") / ("/*" ([^*] / ("*" ! "/"))* "*/")
 s
   = space+
 //  = [ \t\r\n\f]+
@@ -96,7 +96,7 @@ PrimitiveType
         { return type; }
 
 UnsignedIntegerType
-    =   uns:"unsigned"? S kind:(("long" S "long") / "long" / "short")
+    =   uns:"unsigned"? S kind:(("long" S "long") / "long" / "short" / "byte")
         { return (uns ? "unsigned " : "") + (kind.join ? kind.join("") : kind); }
 
 ScopedNameList
@@ -302,7 +302,7 @@ field
 
 // extended attributes
 extendedAttributeList
-    =   w "[" ea:ExtAttrs "]" w
+    =   w "[" w ea:ExtAttrs w "]" w
         { return ea; }
 
 ExtAttrs

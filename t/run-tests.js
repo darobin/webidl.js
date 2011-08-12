@@ -26,15 +26,20 @@ function testOne (idl) {
     var jsonPath = idl.replace(/\.idl$/, ".json");
     var ref;
     try {
-        ref = JSON.parse(fs.readFileSync(jsonPath));
+        ref = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
     }
     catch (e) {
         sys.puts("Could not parse reference, skipping: " + jsonPath);
         return;
     }
     try {
-        var ast = wid.parse(fs.readFileSync(idl));
-        sys.puts(_.isEqual(ast, ref) ? "[OK]" : "### NOT OK ###");
+        var ast = wid.parse(fs.readFileSync(idl, 'utf-8'));
+        if (_.isEqual(ast, ref)) {
+            sys.puts("[OK]");
+        } else {
+            sys.puts("### NOT OK ###");
+            fs.writeFileSync(jsonPath + '.fail', JSON.stringify(ast, null, "  "));
+        }
     }
     catch (e) {
         sys.puts("ERROR parsing '" + idl + "': " + e + "\nline: " + e.line + ":" + e.column);
