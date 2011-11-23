@@ -143,8 +143,14 @@ definitions
         { return defs; }
 
 definition
-    =   def:(module / interface / dictionary / typedef / exception / implements)
+    =   def:(partialinterface / module / interface / dictionary / typedef / exception / implements)
         { return def; }
+
+
+// partial interface definition
+partialinterface
+    =   "partial" S "interface" S name:identifier w "{" w mem:ifMember* w "}" w ";" w
+	    { return { type: "partialinterface", name: name, members: mem }; }
 
 
 // module definition
@@ -207,27 +213,21 @@ SetRaises
         { return list; }
 
 Operation
-    =   extAttrs:extendedAttributeList? w oms:OmittableSpecials w rest:OperationRest
+    =   extAttrs:extendedAttributeList? w quals:Qualifiers w rest:OperationRest
         {
-            for (var k in oms) rest[k] = oms[k];
+            for (var k in quals) rest[k] = quals[k];
             if (extAttrs) rest.extAttrs = extAttrs;
             return rest;
         }
 
-OmittableSpecials
-    =   om:"omittable"? w spe:Specials*
-        {
-            var ret = {};
-            for (var i = 0, n = spe.length; i < n; i++) { ret[spe[i]] = true; }
-            ret.omittable = (om ? true : false);
-            return ret;
-        }
+Qualifiers
+    =   w quals:("static" / Special*)
+        {   if (typeof quals == "string") return [quals];
+		    return quals; }
 
-Specials
-    =   w spe:("getter" / "setter" / "creator" / "deleter" / "caller") w
-        {
-            return spe;
-        }
+Special
+    =   w spe:("getter" / "setter" / "creator" / "deleter" / "legacycaller") w
+        { return spe; }
 
 OperationRest
     =   ret:ReturnType S name:identifier? w "(" w args:Arguments? w ")" w exc:Raises? w ";" w
