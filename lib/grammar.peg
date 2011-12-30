@@ -149,8 +149,8 @@ definition
 
 // partial interface definition
 partialinterface
-    =   "partial" S "interface" S name:identifier w "{" w mem:ifMember* w "}" w ";" w
-	    { return { type: "partialinterface", name: name, members: mem }; }
+    =   extAttrs:extendedAttributeList? S? "partial" S "interface" S name:identifier w "{" w mem:ifMember* w "}" w ";" w
+	    { return { type: "partialinterface", name: name, members: mem, extAttrs: extAttrs }; }
 
 
 // module definition
