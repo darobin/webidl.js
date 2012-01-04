@@ -143,7 +143,7 @@ definitions
         { return defs; }
 
 definition
-    =   def:(partialinterface / module / interface / dictionary / typedef / exception / implements / enum)
+    =   def:(partialinterface / callbackinterface / module / interface / dictionary / typedef / exception / implements / enum / callback )
         { return def; }
 
 
@@ -151,6 +151,11 @@ definition
 partialinterface
     =   extAttrs:extendedAttributeList? S? "partial" S "interface" S name:identifier w "{" w mem:ifMember* w "}" w ";" w
 	    { return { type: "partialinterface", name: name, members: mem, extAttrs: extAttrs }; }
+
+// callback interface definition
+callbackinterface
+    =   extAttrs:extendedAttributeList? S? "callback" S "interface" S name:identifier w "{" w mem:ifMember* w "}" w ";" w
+	    { return { type: "callbackinterface", name: name, members: mem, extAttrs: extAttrs }; }
 
 
 // module definition
@@ -174,6 +179,11 @@ interface
 enum
     =   extAttrs:extendedAttributeList? S? "enum" S name:identifier w "{" w values:EnumValues w "}" w ";" w
         { return { type: "enum", name: name, values: values, extAttrs: extAttrs }; }
+
+// callback definition
+callback
+    =   extAttrs:extendedAttributeList? S? "callback" S name:identifier w "=" w ret:ReturnType S "(" w args:Arguments w ")" w ";" w
+        { return { type: "callback", idlType: ret, name: name, args: args, extAttrs: extAttrs }; }
 
 EnumValues
     =   first:string others:EnumValuesRest*
