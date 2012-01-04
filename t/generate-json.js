@@ -1,7 +1,6 @@
 var sys = require("sys"),
     fs  = require("fs"),
-    wid = require(__dirname + "/../node/WebIDLParser").Parser,
-    peg = require(__dirname + "/../lib/peg").PEG;
+    wid = require(__dirname + "/../node/WebIDLParser").Parser;
 
 var specific = process.argv[2];
 if (specific) {

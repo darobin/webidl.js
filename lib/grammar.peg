@@ -73,12 +73,12 @@ type
             return type; }
 
 TypeDesc
-    =   type:(Sequence / ArrayType / SimpleType)
+    =   type:(Sequence / ArrayType / SimpleType / UnionType)
         { return type; }
 
 Sequence
     =   "sequence<" type:type ">"
-        { return { sequence: true, array: false, idlType: type }; }
+        { return { sequence: true, array: false, idlType: type, members: [] }; }
 
 ArrayType
     =   type:SimpleType "[]"
@@ -87,9 +87,24 @@ ArrayType
             return type;
         }
 
+UnionType
+   =    "(" w members:TypeList w ")"
+        { return { idlType: "union", members: members, sequence: false, array: false }; }
+
+
+TypeList
+   =    first:type S "or" S second:type others:TypeListRest*
+        {   var ret = [first, second];
+            for (var i = 0, n = others.length; i < n; i++) { ret.push(others[i]); }
+            return ret; }
+
+TypeListRest
+   =    S "or" S rest:type
+        { return rest; }
+
 SimpleType
     =   type:(PrimitiveType / UnsignedIntegerType / ScopedName)
-        { return { sequence: false, array: false, idlType: type }; }
+        { return { sequence: false, array: false, idlType: type, members: [] }; }
 
 PrimitiveType
     =   type:("any" / "object" / "boolean" / "octet" / "float" / "double" / "DOMString") ![A-Za-z0-9]
@@ -143,7 +158,7 @@ definitions
         { return defs; }
 
 definition
-    =   def:(partialinterface / module / interface / dictionary / typedef / exception / implements)
+    =   def:(partialinterface / callbackinterface / module / interface / dictionary / typedef / exception / implements / enum / callback )
         { return def; }
 
 
@@ -151,6 +166,11 @@ definition
 partialinterface
     =   extAttrs:extendedAttributeList? S? "partial" S "interface" S name:identifier w "{" w mem:ifMember* w "}" w ";" w
 	    { return { type: "partialinterface", name: name, members: mem, extAttrs: extAttrs }; }
+
+// callback interface definition
+callbackinterface
+    =   extAttrs:extendedAttributeList? S? "callback" S "interface" S name:identifier w "{" w mem:ifMember* w "}" w ";" w
+	    { return { type: "callbackinterface", name: name, members: mem, extAttrs: extAttrs }; }
 
 
 // module definition
@@ -165,10 +185,31 @@ implements
         { return { type: 'implements', target: target, 'implements': impl, extAttrs: extAttrs }; }
 
 
-// interface definitions
+// interface definition
 interface
     =   extAttrs:extendedAttributeList? S? "interface" S name:identifier w herit:ifInheritance? w "{" w mem:ifMember* w "}" w ";" w
         { return { type: "interface", name: name, inheritance: herit, members: mem, extAttrs: extAttrs }; }
+
+// enum definition
+enum
+    =   extAttrs:extendedAttributeList? S? "enum" S name:identifier w "{" w values:EnumValues w "}" w ";" w
+        { return { type: "enum", name: name, values: values, extAttrs: extAttrs }; }
+
+// callback definition
+callback
+    =   extAttrs:extendedAttributeList? S? "callback" S name:identifier w "=" w ret:ReturnType S "(" w args:Arguments w ")" w ";" w
+        { return { type: "callback", idlType: ret, name: name, args: args, extAttrs: extAttrs }; }
+
+EnumValues
+    =   first:string others:EnumValuesRest*
+        {   var ret = [first];
+            for (var i = 0, n = others.length; i < n; i++) { ret.push(others[i]); }
+            return ret; }
+
+EnumValuesRest
+    =   w "," w rest:string
+        { return rest; }
+
 
 ifInheritance
     =   ":" w herit:ScopedNameList
