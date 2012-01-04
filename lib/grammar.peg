@@ -73,12 +73,12 @@ type
             return type; }
 
 TypeDesc
-    =   type:(Sequence / ArrayType / SimpleType)
+    =   type:(Sequence / ArrayType / SimpleType / UnionType)
         { return type; }
 
 Sequence
     =   "sequence<" type:type ">"
-        { return { sequence: true, array: false, idlType: type }; }
+        { return { sequence: true, array: false, idlType: type, members: [] }; }
 
 ArrayType
     =   type:SimpleType "[]"
@@ -87,9 +87,24 @@ ArrayType
             return type;
         }
 
+UnionType
+   =    "(" w members:TypeList w ")"
+        { return { idlType: "union", members: members, sequence: false, array: false }; }
+
+
+TypeList
+   =    first:type S "or" S second:type others:TypeListRest*
+        {   var ret = [first, second];
+            for (var i = 0, n = others.length; i < n; i++) { ret.push(others[i]); }
+            return ret; }
+
+TypeListRest
+   =    S "or" S rest:type
+        { return rest; }
+
 SimpleType
     =   type:(PrimitiveType / UnsignedIntegerType / ScopedName)
-        { return { sequence: false, array: false, idlType: type }; }
+        { return { sequence: false, array: false, idlType: type, members: [] }; }
 
 PrimitiveType
     =   type:("any" / "object" / "boolean" / "octet" / "float" / "double" / "DOMString") ![A-Za-z0-9]

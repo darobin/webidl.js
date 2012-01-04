@@ -45,6 +45,9 @@ window.WebIDLParser = (function(){
         "Special": parse_Special,
         "Stringifier": parse_Stringifier,
         "TypeDesc": parse_TypeDesc,
+        "TypeList": parse_TypeList,
+        "TypeListRest": parse_TypeListRest,
+        "UnionType": parse_UnionType,
         "UnsignedIntegerType": parse_UnsignedIntegerType,
         "attrOrOp": parse_attrOrOp,
         "callback": parse_callback,
@@ -1525,19 +1528,24 @@ window.WebIDLParser = (function(){
         
         
         var savedPos0 = pos;
-        var result5 = parse_Sequence();
-        if (result5 !== null) {
-          var result1 = result5;
+        var result6 = parse_Sequence();
+        if (result6 !== null) {
+          var result1 = result6;
         } else {
-          var result4 = parse_ArrayType();
-          if (result4 !== null) {
-            var result1 = result4;
+          var result5 = parse_ArrayType();
+          if (result5 !== null) {
+            var result1 = result5;
           } else {
-            var result3 = parse_SimpleType();
-            if (result3 !== null) {
-              var result1 = result3;
+            var result4 = parse_SimpleType();
+            if (result4 !== null) {
+              var result1 = result4;
             } else {
-              var result1 = null;;
+              var result3 = parse_UnionType();
+              if (result3 !== null) {
+                var result1 = result3;
+              } else {
+                var result1 = null;;
+              };
             };
           };
         }
@@ -1607,7 +1615,7 @@ window.WebIDLParser = (function(){
           pos = savedPos1;
         }
         var result2 = result1 !== null
-          ? (function(type) { return { sequence: true, array: false, idlType: type }; })(result1[1])
+          ? (function(type) { return { sequence: true, array: false, idlType: type, members: [] }; })(result1[1])
           : null;
         if (result2 !== null) {
           var result0 = result2;
@@ -1679,6 +1687,228 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
+      function parse_UnionType() {
+        var cacheKey = 'UnionType@' + pos;
+        var cachedResult = cache[cacheKey];
+        if (cachedResult) {
+          pos = cachedResult.nextPos;
+          return cachedResult.result;
+        }
+        
+        
+        var savedPos0 = pos;
+        var savedPos1 = pos;
+        if (input.substr(pos, 1) === "(") {
+          var result3 = "(";
+          pos += 1;
+        } else {
+          var result3 = null;
+          if (reportMatchFailures) {
+            matchFailed("\"(\"");
+          }
+        }
+        if (result3 !== null) {
+          var result4 = parse_w();
+          if (result4 !== null) {
+            var result5 = parse_TypeList();
+            if (result5 !== null) {
+              var result6 = parse_w();
+              if (result6 !== null) {
+                if (input.substr(pos, 1) === ")") {
+                  var result7 = ")";
+                  pos += 1;
+                } else {
+                  var result7 = null;
+                  if (reportMatchFailures) {
+                    matchFailed("\")\"");
+                  }
+                }
+                if (result7 !== null) {
+                  var result1 = [result3, result4, result5, result6, result7];
+                } else {
+                  var result1 = null;
+                  pos = savedPos1;
+                }
+              } else {
+                var result1 = null;
+                pos = savedPos1;
+              }
+            } else {
+              var result1 = null;
+              pos = savedPos1;
+            }
+          } else {
+            var result1 = null;
+            pos = savedPos1;
+          }
+        } else {
+          var result1 = null;
+          pos = savedPos1;
+        }
+        var result2 = result1 !== null
+          ? (function(members) { return { idlType: "union", members: members, sequence: false, array: false }; })(result1[2])
+          : null;
+        if (result2 !== null) {
+          var result0 = result2;
+        } else {
+          var result0 = null;
+          pos = savedPos0;
+        }
+        
+        
+        
+        cache[cacheKey] = {
+          nextPos: pos,
+          result:  result0
+        };
+        return result0;
+      }
+      
+      function parse_TypeList() {
+        var cacheKey = 'TypeList@' + pos;
+        var cachedResult = cache[cacheKey];
+        if (cachedResult) {
+          pos = cachedResult.nextPos;
+          return cachedResult.result;
+        }
+        
+        
+        var savedPos0 = pos;
+        var savedPos1 = pos;
+        var result3 = parse_type();
+        if (result3 !== null) {
+          var result4 = parse_s();
+          if (result4 !== null) {
+            if (input.substr(pos, 2) === "or") {
+              var result5 = "or";
+              pos += 2;
+            } else {
+              var result5 = null;
+              if (reportMatchFailures) {
+                matchFailed("\"or\"");
+              }
+            }
+            if (result5 !== null) {
+              var result6 = parse_s();
+              if (result6 !== null) {
+                var result7 = parse_type();
+                if (result7 !== null) {
+                  var result8 = [];
+                  var result9 = parse_TypeListRest();
+                  while (result9 !== null) {
+                    result8.push(result9);
+                    var result9 = parse_TypeListRest();
+                  }
+                  if (result8 !== null) {
+                    var result1 = [result3, result4, result5, result6, result7, result8];
+                  } else {
+                    var result1 = null;
+                    pos = savedPos1;
+                  }
+                } else {
+                  var result1 = null;
+                  pos = savedPos1;
+                }
+              } else {
+                var result1 = null;
+                pos = savedPos1;
+              }
+            } else {
+              var result1 = null;
+              pos = savedPos1;
+            }
+          } else {
+            var result1 = null;
+            pos = savedPos1;
+          }
+        } else {
+          var result1 = null;
+          pos = savedPos1;
+        }
+        var result2 = result1 !== null
+          ? (function(first, second, others) {   var ret = [first, second];
+                      for (var i = 0, n = others.length; i < n; i++) { ret.push(others[i]); }
+                      return ret; })(result1[0], result1[4], result1[5])
+          : null;
+        if (result2 !== null) {
+          var result0 = result2;
+        } else {
+          var result0 = null;
+          pos = savedPos0;
+        }
+        
+        
+        
+        cache[cacheKey] = {
+          nextPos: pos,
+          result:  result0
+        };
+        return result0;
+      }
+      
+      function parse_TypeListRest() {
+        var cacheKey = 'TypeListRest@' + pos;
+        var cachedResult = cache[cacheKey];
+        if (cachedResult) {
+          pos = cachedResult.nextPos;
+          return cachedResult.result;
+        }
+        
+        
+        var savedPos0 = pos;
+        var savedPos1 = pos;
+        var result3 = parse_s();
+        if (result3 !== null) {
+          if (input.substr(pos, 2) === "or") {
+            var result4 = "or";
+            pos += 2;
+          } else {
+            var result4 = null;
+            if (reportMatchFailures) {
+              matchFailed("\"or\"");
+            }
+          }
+          if (result4 !== null) {
+            var result5 = parse_s();
+            if (result5 !== null) {
+              var result6 = parse_type();
+              if (result6 !== null) {
+                var result1 = [result3, result4, result5, result6];
+              } else {
+                var result1 = null;
+                pos = savedPos1;
+              }
+            } else {
+              var result1 = null;
+              pos = savedPos1;
+            }
+          } else {
+            var result1 = null;
+            pos = savedPos1;
+          }
+        } else {
+          var result1 = null;
+          pos = savedPos1;
+        }
+        var result2 = result1 !== null
+          ? (function(rest) { return rest; })(result1[3])
+          : null;
+        if (result2 !== null) {
+          var result0 = result2;
+        } else {
+          var result0 = null;
+          pos = savedPos0;
+        }
+        
+        
+        
+        cache[cacheKey] = {
+          nextPos: pos,
+          result:  result0
+        };
+        return result0;
+      }
+      
       function parse_SimpleType() {
         var cacheKey = 'SimpleType@' + pos;
         var cachedResult = cache[cacheKey];
@@ -1706,7 +1936,7 @@ window.WebIDLParser = (function(){
           };
         }
         var result2 = result1 !== null
-          ? (function(type) { return { sequence: false, array: false, idlType: type }; })(result1)
+          ? (function(type) { return { sequence: false, array: false, idlType: type, members: [] }; })(result1)
           : null;
         if (result2 !== null) {
           var result0 = result2;
