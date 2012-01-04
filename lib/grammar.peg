@@ -143,7 +143,7 @@ definitions
         { return defs; }
 
 definition
-    =   def:(partialinterface / module / interface / dictionary / typedef / exception / implements)
+    =   def:(partialinterface / module / interface / dictionary / typedef / exception / implements / enum)
         { return def; }
 
 
@@ -165,10 +165,26 @@ implements
         { return { type: 'implements', target: target, 'implements': impl, extAttrs: extAttrs }; }
 
 
-// interface definitions
+// interface definition
 interface
     =   extAttrs:extendedAttributeList? S? "interface" S name:identifier w herit:ifInheritance? w "{" w mem:ifMember* w "}" w ";" w
         { return { type: "interface", name: name, inheritance: herit, members: mem, extAttrs: extAttrs }; }
+
+// enum definition
+enum
+    =   extAttrs:extendedAttributeList? S? "enum" S name:identifier w "{" w values:EnumValues w "}" w ";" w
+        { return { type: "enum", name: name, values: values, extAttrs: extAttrs }; }
+
+EnumValues
+    =   first:string others:EnumValuesRest*
+        {   var ret = [first];
+            for (var i = 0, n = others.length; i < n; i++) { ret.push(others[i]); }
+            return ret; }
+
+EnumValuesRest
+    =   w "," w rest:string
+        { return rest; }
+
 
 ifInheritance
     =   ":" w herit:ScopedNameList
