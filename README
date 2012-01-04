@@ -34,7 +34,7 @@ grammar in lib/grammar.peg. To modify the grammar:
 
         - read up on PEG.js at http://pegjs.majda.cz/
         - install node and npm
-        - install pegjs with node install -g pegjs
+        - install pegjs with npm install -g pegjs
         - run 'make parsers' in the top-level directory. (This assumes
           that you're in a Unix-like environment with make and sed installed.)
 
