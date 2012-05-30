@@ -1,8 +1,7 @@
 var sys = require("sys"),
     fs  = require("fs"),
     wid = require(__dirname + "/../node/WebIDLParser").Parser,
-    _ = require("./underscore")._,
-    peg = require(__dirname + "/../lib/peg").PEG;
+    _ = require("./underscore")._;
 
 var specific = process.argv[2];
 if (specific) {
