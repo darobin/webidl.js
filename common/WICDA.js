@@ -6,8 +6,8 @@
     var isNode = (typeof exports !== "undefined") && (typeof __dirname !== "undefined");
     var widlp, wicdp;
     if (isNode) {
-        widlp = require("WebIDLParser").Parser;
-        wicdp = require("WICDAParser").Parser;
+        widlp = require("webidl.js").webidl;
+        wicdp = require("webidl.js").wicda;
     }
     else {
         widlp = WebIDLParser;

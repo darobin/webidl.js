@@ -1,0 +1,20 @@
+{
+  "author": "Robin Berjon <http://berjon.com>",
+  "contributors": ["Dominique Hazael-Massieux", "Aapo Laitinen", "David Flanagan"],
+  "name": "webidl.js",
+  "description": "A parser for WebIDL and WICDA",
+  "version": "0.1.0",
+  "keywords": ["webidl", "wicda", "peg", "parser", "idl"],
+  "homepage": "https://github.com/darobin/webidl.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/darobin/webidl.js.git"
+  },
+  "main": "node/webidl.js",
+  "engines": {
+    "node": ">=0.6.0"
+  },
+  "dependencies": {
+    "pegjs": "0.7"
+  }
+}
