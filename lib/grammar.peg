@@ -228,7 +228,7 @@ const
         { return { type: "const", extAttrs: extAttrs, idlType: type, name: name, value: value }; }
 
 constExpr
-    =   value:(BooleanLiteral / float / integer / "NaN")
+    =   value:(BooleanLiteral / float / integer / "NaN" / "null")
         { return value; }
 
 attrOrOp
@@ -322,7 +322,7 @@ dictionaryMember
 
 
 defaultValue
-    =   "=" w (value:constExpr / string)
+    =   "=" w value:(constExpr / string)
         { return value; }
 
 
