@@ -54,7 +54,7 @@ dotFloat
         { return num.join("") + "." + dec.join("") + fee; }
 
 float
-    =   neg:"-"? num:(leadFloat / dotFloat / expFloat)
+    =   neg:"-"? num:(leadFloat / dotFloat / expFloat / "Infinity")
         { return neg + num; }
 
 string
@@ -103,12 +103,16 @@ TypeListRest
         { return rest; }
 
 SimpleType
-    =   type:(PrimitiveType / UnsignedIntegerType / ScopedName)
+    =   type:(PrimitiveType / UnsignedIntegerType / FloatType / ScopedName )
         { return { sequence: false, array: false, idlType: type, members: [] }; }
 
 PrimitiveType
-    =   type:("any" / "object" / "boolean" / "octet" / "float" / "double" / "DOMString") ![A-Za-z0-9]
+    =   type:("any" / "object" / "boolean" / "octet" / "DOMString") ![A-Za-z0-9]
         { return type; }
+
+FloatType
+    =   unr:"unrestricted"? S kind:("float" / "double")
+         { return (unr ? "unrestricted " : "") + (kind); }
 
 UnsignedIntegerType
     =   uns:"unsigned"? S kind:(("long" S "long") / "long" / "short" / "byte")
@@ -224,7 +228,7 @@ const
         { return { type: "const", extAttrs: extAttrs, idlType: type, name: name, value: value }; }
 
 constExpr
-    =   value:(BooleanLiteral / float / integer)
+    =   value:(BooleanLiteral / float / integer / "NaN" / "null")
         { return value; }
 
 attrOrOp
@@ -318,7 +322,7 @@ dictionaryMember
 
 
 defaultValue
-    =   "=" w value:constExpr
+    =   "=" w value:(constExpr / string)
         { return value; }
 
 
