@@ -75,6 +75,7 @@ window.WebIDLParser = (function(){
         "definitions": parse_definitions,
         "definition": parse_definition,
         "partialinterface": parse_partialinterface,
+        "partialdictionary": parse_partialdictionary,
         "callbackinterface": parse_callbackinterface,
         "module": parse_module,
         "implements": parse_implements,
@@ -2171,25 +2172,28 @@ window.WebIDLParser = (function(){
         var pos0;
         
         pos0 = pos;
-        result0 = parse_partialinterface();
+        result0 = parse_partialdictionary();
         if (result0 === null) {
-          result0 = parse_callbackinterface();
+          result0 = parse_partialinterface();
           if (result0 === null) {
-            result0 = parse_module();
+            result0 = parse_callbackinterface();
             if (result0 === null) {
-              result0 = parse_interface();
+              result0 = parse_module();
               if (result0 === null) {
-                result0 = parse_dictionary();
+                result0 = parse_interface();
                 if (result0 === null) {
-                  result0 = parse_typedef();
+                  result0 = parse_dictionary();
                   if (result0 === null) {
-                    result0 = parse_exception();
+                    result0 = parse_typedef();
                     if (result0 === null) {
-                      result0 = parse_implements();
+                      result0 = parse_exception();
                       if (result0 === null) {
-                        result0 = parse_enum();
+                        result0 = parse_implements();
                         if (result0 === null) {
-                          result0 = parse_callback();
+                          result0 = parse_enum();
+                          if (result0 === null) {
+                            result0 = parse_callback();
+                          }
                         }
                       }
                     }
@@ -2360,6 +2364,157 @@ window.WebIDLParser = (function(){
         }
         if (result0 !== null) {
           result0 = (function(offset, extAttrs, name, mem) { return { type: "partialinterface", name: name, members: mem, extAttrs: extAttrs }; })(pos0, result0[0], result0[6], result0[10]);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        return result0;
+      }
+      
+      function parse_partialdictionary() {
+        var result0, result1, result2, result3, result4, result5, result6, result7, result8, result9, result10, result11, result12, result13;
+        var pos0, pos1;
+        
+        pos0 = pos;
+        pos1 = pos;
+        if (input.substr(pos, 7) === "partial") {
+          result0 = "partial";
+          pos += 7;
+        } else {
+          result0 = null;
+          if (reportFailures === 0) {
+            matchFailed("\"partial\"");
+          }
+        }
+        if (result0 !== null) {
+          result1 = parse_s();
+          if (result1 !== null) {
+            if (input.substr(pos, 10) === "dictionary") {
+              result2 = "dictionary";
+              pos += 10;
+            } else {
+              result2 = null;
+              if (reportFailures === 0) {
+                matchFailed("\"dictionary\"");
+              }
+            }
+            if (result2 !== null) {
+              result3 = parse_s();
+              if (result3 !== null) {
+                result4 = parse_identifier();
+                if (result4 !== null) {
+                  result5 = parse_w();
+                  if (result5 !== null) {
+                    if (input.charCodeAt(pos) === 123) {
+                      result6 = "{";
+                      pos++;
+                    } else {
+                      result6 = null;
+                      if (reportFailures === 0) {
+                        matchFailed("\"{\"");
+                      }
+                    }
+                    if (result6 !== null) {
+                      result7 = parse_w();
+                      if (result7 !== null) {
+                        result8 = [];
+                        result9 = parse_dictionaryMember();
+                        while (result9 !== null) {
+                          result8.push(result9);
+                          result9 = parse_dictionaryMember();
+                        }
+                        if (result8 !== null) {
+                          result9 = parse_w();
+                          if (result9 !== null) {
+                            if (input.charCodeAt(pos) === 125) {
+                              result10 = "}";
+                              pos++;
+                            } else {
+                              result10 = null;
+                              if (reportFailures === 0) {
+                                matchFailed("\"}\"");
+                              }
+                            }
+                            if (result10 !== null) {
+                              result11 = parse_w();
+                              if (result11 !== null) {
+                                if (input.charCodeAt(pos) === 59) {
+                                  result12 = ";";
+                                  pos++;
+                                } else {
+                                  result12 = null;
+                                  if (reportFailures === 0) {
+                                    matchFailed("\";\"");
+                                  }
+                                }
+                                if (result12 !== null) {
+                                  result13 = parse_w();
+                                  if (result13 !== null) {
+                                    result0 = [result0, result1, result2, result3, result4, result5, result6, result7, result8, result9, result10, result11, result12, result13];
+                                  } else {
+                                    result0 = null;
+                                    pos = pos1;
+                                  }
+                                } else {
+                                  result0 = null;
+                                  pos = pos1;
+                                }
+                              } else {
+                                result0 = null;
+                                pos = pos1;
+                              }
+                            } else {
+                              result0 = null;
+                              pos = pos1;
+                            }
+                          } else {
+                            result0 = null;
+                            pos = pos1;
+                          }
+                        } else {
+                          result0 = null;
+                          pos = pos1;
+                        }
+                      } else {
+                        result0 = null;
+                        pos = pos1;
+                      }
+                    } else {
+                      result0 = null;
+                      pos = pos1;
+                    }
+                  } else {
+                    result0 = null;
+                    pos = pos1;
+                  }
+                } else {
+                  result0 = null;
+                  pos = pos1;
+                }
+              } else {
+                result0 = null;
+                pos = pos1;
+              }
+            } else {
+              result0 = null;
+              pos = pos1;
+            }
+          } else {
+            result0 = null;
+            pos = pos1;
+          }
+        } else {
+          result0 = null;
+          pos = pos1;
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, name, members) {
+                    return {
+                        type: "partialdictionary",
+                        name: name,
+                        members: members
+                    };
+                })(pos0, result0[4], result0[8]);
         }
         if (result0 === null) {
           pos = pos0;
@@ -2907,7 +3062,7 @@ window.WebIDLParser = (function(){
       }
       
       function parse_enum() {
-        var result0, result1, result2, result3, result4, result5, result6, result7, result8, result9, result10, result11, result12, result13;
+        var result0, result1, result2, result3, result4, result5, result6, result7, result8, result9, result10, result11, result12, result13, result14, result15;
         var pos0, pos1;
         
         pos0 = pos;
@@ -2949,32 +3104,54 @@ window.WebIDLParser = (function(){
                         result8 = parse_EnumValues();
                         if (result8 !== null) {
                           result9 = parse_w();
+                          result9 = result9 !== null ? result9 : "";
                           if (result9 !== null) {
-                            if (input.charCodeAt(pos) === 125) {
-                              result10 = "}";
+                            if (input.charCodeAt(pos) === 44) {
+                              result10 = ",";
                               pos++;
                             } else {
                               result10 = null;
                               if (reportFailures === 0) {
-                                matchFailed("\"}\"");
+                                matchFailed("\",\"");
                               }
                             }
+                            result10 = result10 !== null ? result10 : "";
                             if (result10 !== null) {
                               result11 = parse_w();
                               if (result11 !== null) {
-                                if (input.charCodeAt(pos) === 59) {
-                                  result12 = ";";
+                                if (input.charCodeAt(pos) === 125) {
+                                  result12 = "}";
                                   pos++;
                                 } else {
                                   result12 = null;
                                   if (reportFailures === 0) {
-                                    matchFailed("\";\"");
+                                    matchFailed("\"}\"");
                                   }
                                 }
                                 if (result12 !== null) {
                                   result13 = parse_w();
                                   if (result13 !== null) {
-                                    result0 = [result0, result1, result2, result3, result4, result5, result6, result7, result8, result9, result10, result11, result12, result13];
+                                    if (input.charCodeAt(pos) === 59) {
+                                      result14 = ";";
+                                      pos++;
+                                    } else {
+                                      result14 = null;
+                                      if (reportFailures === 0) {
+                                        matchFailed("\";\"");
+                                      }
+                                    }
+                                    if (result14 !== null) {
+                                      result15 = parse_w();
+                                      if (result15 !== null) {
+                                        result0 = [result0, result1, result2, result3, result4, result5, result6, result7, result8, result9, result10, result11, result12, result13, result14, result15];
+                                      } else {
+                                        result0 = null;
+                                        pos = pos1;
+                                      }
+                                    } else {
+                                      result0 = null;
+                                      pos = pos1;
+                                    }
                                   } else {
                                     result0 = null;
                                     pos = pos1;
@@ -3503,6 +3680,17 @@ window.WebIDLParser = (function(){
                   result0 = null;
                   if (reportFailures === 0) {
                     matchFailed("\"null\"");
+                  }
+                }
+                if (result0 === null) {
+                  if (input.charCodeAt(pos) === 39) {
+                    result0 = "'";
+                    pos++;
+                  } else {
+                    result0 = null;
+                    if (reportFailures === 0) {
+                      matchFailed("\"'\"");
+                    }
                   }
                 }
               }
@@ -4597,7 +4785,7 @@ window.WebIDLParser = (function(){
         }
         if (result0 !== null) {
           result0 = (function(offset, name, superclass, members) {
-                        return { 
+                        return {
                             type: "dictionary",
                             name: name,
                             inheritance: superclass,
