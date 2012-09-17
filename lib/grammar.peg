@@ -162,7 +162,7 @@ definitions
         { return defs; }
 
 definition
-    =   def:(partialinterface / callbackinterface / module / interface / dictionary / typedef / exception / implements / enum / callback )
+    =   def:(partialdictionary / partialinterface / callbackinterface / module / interface / dictionary / typedef / exception / implements / enum / callback )
         { return def; }
 
 
@@ -170,6 +170,18 @@ definition
 partialinterface
     =   extAttrs:extendedAttributeList? S? "partial" S "interface" S name:identifier w "{" w mem:ifMember* w "}" w ";" w
 	    { return { type: "partialinterface", name: name, members: mem, extAttrs: extAttrs }; }
+
+// partial dictionary definition
+partialdictionary
+    =   "partial" S "dictionary" S name:identifier w "{"
+        w members:dictionaryMember* w "}" w ";" w
+        {
+            return {
+                type: "partialdictionary",
+                name: name,
+                members: members
+            };
+        }
 
 // callback interface definition
 callbackinterface
@@ -196,7 +208,7 @@ interface
 
 // enum definition
 enum
-    =   extAttrs:extendedAttributeList? S? "enum" S name:identifier w "{" w values:EnumValues w "}" w ";" w
+    =   extAttrs:extendedAttributeList? S? "enum" S name:identifier w "{" w values:EnumValues w? ","? w "}" w ";" w
         { return { type: "enum", name: name, values: values, extAttrs: extAttrs }; }
 
 // callback definition
@@ -228,7 +240,7 @@ const
         { return { type: "const", extAttrs: extAttrs, idlType: type, name: name, value: value }; }
 
 constExpr
-    =   value:(BooleanLiteral / float / integer / "NaN" / "null")
+    =   value:(BooleanLiteral / float / integer / "NaN" / "null" / "'")
         { return value; }
 
 attrOrOp
@@ -301,15 +313,15 @@ dictionary
     =   "dictionary" S name:identifier w superclass:ifInheritance? w "{"
             w members:dictionaryMember* w "}" w ";" w
             {
-                return { 
+                return {
                     type: "dictionary",
                     name: name,
                     inheritance: superclass,
                     members: members
                 };
-            }           
+            }
 
-dictionaryMember 
+dictionaryMember
     =    extAttrs:extendedAttributeList? w type:type S name:identifier
          w defaultValue:defaultValue? w ";" w
          {
@@ -395,7 +407,7 @@ ExtAttrArgList
 //             if (typeof inCurl !== "undefined") return { type: "curly", content: inCurl };
 //             if (typeof other !== "undefined") return { type: "other", content: other };
 //         };
-// 
+//
 // // this is too greedy
 // Other
 //     =   content:("," / "..." / "::" / ":" / ";" / "<" / ">" / "=" / "?" /
