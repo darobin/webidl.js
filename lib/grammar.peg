@@ -357,8 +357,16 @@ typedef
 
 // exception definition
 exception
-    =   extAttrs:ExtendedAttributeList w "exception" S name:identifier w "{" w mem:ExceptionMembers w "}" w ";" w
-        { return { type: 'exception', name: name, members: mem, extAttrs: extAttrs }; }
+    =   extAttrs:ExtendedAttributeList w "exception" S name:identifier w herit:Inheritance w "{" w mem:ExceptionMembers w "}" w ";" w
+        {
+            return {
+                type: 'exception',
+                name: name,
+                inheritance: herit,
+                members: mem,
+                extAttrs: extAttrs,
+            };
+        }
 
 ExceptionMembers
     =   mem:ExceptionMember*
