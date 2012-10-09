@@ -84,8 +84,10 @@ window.WebIDLParser = (function(){
         "callback": parse_callback,
         "EnumValues": parse_EnumValues,
         "EnumValuesRest": parse_EnumValuesRest,
-        "ifInheritance": parse_ifInheritance,
-        "ifMember": parse_ifMember,
+        "Inheritance": parse_Inheritance,
+        "InheritanceInner": parse_InheritanceInner,
+        "InterfaceMemberList": parse_InterfaceMemberList,
+        "InterfaceMember": parse_InterfaceMember,
         "const": parse_const,
         "constExpr": parse_constExpr,
         "attrOrOp": parse_attrOrOp,
@@ -102,13 +104,16 @@ window.WebIDLParser = (function(){
         "Argument": parse_Argument,
         "Raises": parse_Raises,
         "dictionary": parse_dictionary,
-        "dictionaryMember": parse_dictionaryMember,
+        "DictionaryMemberList": parse_DictionaryMemberList,
+        "DictionaryMember": parse_DictionaryMember,
         "defaultValue": parse_defaultValue,
         "typedef": parse_typedef,
         "exception": parse_exception,
-        "exMember": parse_exMember,
+        "ExceptionMembers": parse_ExceptionMembers,
+        "ExceptionMember": parse_ExceptionMember,
         "field": parse_field,
-        "extendedAttributeList": parse_extendedAttributeList,
+        "ExtendedAttributeList": parse_ExtendedAttributeList,
+        "ExtendedAttributeListInner": parse_ExtendedAttributeListInner,
         "ExtAttrs": parse_ExtAttrs,
         "ExtAttrsRest": parse_ExtAttrsRest,
         "ExtAttr": parse_ExtAttr,
@@ -2218,8 +2223,7 @@ window.WebIDLParser = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_extendedAttributeList();
-        result0 = result0 !== null ? result0 : "";
+        result0 = parse_ExtendedAttributeList();
         if (result0 !== null) {
           result1 = parse_s();
           result1 = result1 !== null ? result1 : "";
@@ -2264,12 +2268,7 @@ window.WebIDLParser = (function(){
                         if (result8 !== null) {
                           result9 = parse_w();
                           if (result9 !== null) {
-                            result10 = [];
-                            result11 = parse_ifMember();
-                            while (result11 !== null) {
-                              result10.push(result11);
-                              result11 = parse_ifMember();
-                            }
+                            result10 = parse_InterfaceMemberList();
                             if (result10 !== null) {
                               result11 = parse_w();
                               if (result11 !== null) {
@@ -2417,12 +2416,7 @@ window.WebIDLParser = (function(){
                     if (result6 !== null) {
                       result7 = parse_w();
                       if (result7 !== null) {
-                        result8 = [];
-                        result9 = parse_dictionaryMember();
-                        while (result9 !== null) {
-                          result8.push(result9);
-                          result9 = parse_dictionaryMember();
-                        }
+                        result8 = parse_DictionaryMemberList();
                         if (result8 !== null) {
                           result9 = parse_w();
                           if (result9 !== null) {
@@ -2528,8 +2522,7 @@ window.WebIDLParser = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_extendedAttributeList();
-        result0 = result0 !== null ? result0 : "";
+        result0 = parse_ExtendedAttributeList();
         if (result0 !== null) {
           result1 = parse_s();
           result1 = result1 !== null ? result1 : "";
@@ -2574,12 +2567,7 @@ window.WebIDLParser = (function(){
                         if (result8 !== null) {
                           result9 = parse_w();
                           if (result9 !== null) {
-                            result10 = [];
-                            result11 = parse_ifMember();
-                            while (result11 !== null) {
-                              result10.push(result11);
-                              result11 = parse_ifMember();
-                            }
+                            result10 = parse_InterfaceMemberList();
                             if (result10 !== null) {
                               result11 = parse_w();
                               if (result11 !== null) {
@@ -2687,8 +2675,7 @@ window.WebIDLParser = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_extendedAttributeList();
-        result0 = result0 !== null ? result0 : "";
+        result0 = parse_ExtendedAttributeList();
         if (result0 !== null) {
           result1 = parse_s();
           result1 = result1 !== null ? result1 : "";
@@ -2821,8 +2808,7 @@ window.WebIDLParser = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_extendedAttributeList();
-        result0 = result0 !== null ? result0 : "";
+        result0 = parse_ExtendedAttributeList();
         if (result0 !== null) {
           result1 = parse_s();
           result1 = result1 !== null ? result1 : "";
@@ -2915,8 +2901,7 @@ window.WebIDLParser = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_extendedAttributeList();
-        result0 = result0 !== null ? result0 : "";
+        result0 = parse_ExtendedAttributeList();
         if (result0 !== null) {
           result1 = parse_s();
           result1 = result1 !== null ? result1 : "";
@@ -2937,8 +2922,7 @@ window.WebIDLParser = (function(){
                 if (result4 !== null) {
                   result5 = parse_w();
                   if (result5 !== null) {
-                    result6 = parse_ifInheritance();
-                    result6 = result6 !== null ? result6 : "";
+                    result6 = parse_Inheritance();
                     if (result6 !== null) {
                       result7 = parse_w();
                       if (result7 !== null) {
@@ -2954,12 +2938,7 @@ window.WebIDLParser = (function(){
                         if (result8 !== null) {
                           result9 = parse_w();
                           if (result9 !== null) {
-                            result10 = [];
-                            result11 = parse_ifMember();
-                            while (result11 !== null) {
-                              result10.push(result11);
-                              result11 = parse_ifMember();
-                            }
+                            result10 = parse_InterfaceMemberList();
                             if (result10 !== null) {
                               result11 = parse_w();
                               if (result11 !== null) {
@@ -3067,8 +3046,7 @@ window.WebIDLParser = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_extendedAttributeList();
-        result0 = result0 !== null ? result0 : "";
+        result0 = parse_ExtendedAttributeList();
         if (result0 !== null) {
           result1 = parse_s();
           result1 = result1 !== null ? result1 : "";
@@ -3223,8 +3201,7 @@ window.WebIDLParser = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_extendedAttributeList();
-        result0 = result0 !== null ? result0 : "";
+        result0 = parse_ExtendedAttributeList();
         if (result0 !== null) {
           result1 = parse_s();
           result1 = result1 !== null ? result1 : "";
@@ -3466,7 +3443,23 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_ifInheritance() {
+      function parse_Inheritance() {
+        var result0;
+        var pos0;
+        
+        pos0 = pos;
+        result0 = parse_InheritanceInner();
+        result0 = result0 !== null ? result0 : "";
+        if (result0 !== null) {
+          result0 = (function(offset, herit) { return herit ? herit : []; })(pos0, result0);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        return result0;
+      }
+      
+      function parse_InheritanceInner() {
         var result0, result1, result2;
         var pos0, pos1;
         
@@ -3508,7 +3501,27 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_ifMember() {
+      function parse_InterfaceMemberList() {
+        var result0, result1;
+        var pos0;
+        
+        pos0 = pos;
+        result0 = [];
+        result1 = parse_InterfaceMember();
+        while (result1 !== null) {
+          result0.push(result1);
+          result1 = parse_InterfaceMember();
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, mem) { return mem ? mem : []; })(pos0, result0);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        return result0;
+      }
+      
+      function parse_InterfaceMember() {
         var result0;
         var pos0;
         
@@ -3532,8 +3545,7 @@ window.WebIDLParser = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_extendedAttributeList();
-        result0 = result0 !== null ? result0 : "";
+        result0 = parse_ExtendedAttributeList();
         if (result0 !== null) {
           result1 = parse_s();
           result1 = result1 !== null ? result1 : "";
@@ -3795,8 +3807,7 @@ window.WebIDLParser = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_extendedAttributeList();
-        result0 = result0 !== null ? result0 : "";
+        result0 = parse_ExtendedAttributeList();
         if (result0 !== null) {
           result1 = parse_w();
           if (result1 !== null) {
@@ -4082,8 +4093,7 @@ window.WebIDLParser = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_extendedAttributeList();
-        result0 = result0 !== null ? result0 : "";
+        result0 = parse_ExtendedAttributeList();
         if (result0 !== null) {
           result1 = parse_w();
           if (result1 !== null) {
@@ -4474,8 +4484,7 @@ window.WebIDLParser = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_extendedAttributeList();
-        result0 = result0 !== null ? result0 : "";
+        result0 = parse_ExtendedAttributeList();
         if (result0 !== null) {
           result1 = parse_w();
           if (result1 !== null) {
@@ -4676,8 +4685,7 @@ window.WebIDLParser = (function(){
             if (result2 !== null) {
               result3 = parse_w();
               if (result3 !== null) {
-                result4 = parse_ifInheritance();
-                result4 = result4 !== null ? result4 : "";
+                result4 = parse_Inheritance();
                 if (result4 !== null) {
                   result5 = parse_w();
                   if (result5 !== null) {
@@ -4693,12 +4701,7 @@ window.WebIDLParser = (function(){
                     if (result6 !== null) {
                       result7 = parse_w();
                       if (result7 !== null) {
-                        result8 = [];
-                        result9 = parse_dictionaryMember();
-                        while (result9 !== null) {
-                          result8.push(result9);
-                          result9 = parse_dictionaryMember();
-                        }
+                        result8 = parse_DictionaryMemberList();
                         if (result8 !== null) {
                           result9 = parse_w();
                           if (result9 !== null) {
@@ -4799,14 +4802,33 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_dictionaryMember() {
+      function parse_DictionaryMemberList() {
+        var result0, result1;
+        var pos0;
+        
+        pos0 = pos;
+        result0 = [];
+        result1 = parse_DictionaryMember();
+        while (result1 !== null) {
+          result0.push(result1);
+          result1 = parse_DictionaryMember();
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, mem) { return mem ? mem : []; })(pos0, result0);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        return result0;
+      }
+      
+      function parse_DictionaryMember() {
         var result0, result1, result2, result3, result4, result5, result6, result7, result8, result9;
         var pos0, pos1;
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_extendedAttributeList();
-        result0 = result0 !== null ? result0 : "";
+        result0 = parse_ExtendedAttributeList();
         if (result0 !== null) {
           result1 = parse_w();
           if (result1 !== null) {
@@ -5022,8 +5044,7 @@ window.WebIDLParser = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_extendedAttributeList();
-        result0 = result0 !== null ? result0 : "";
+        result0 = parse_ExtendedAttributeList();
         if (result0 !== null) {
           result1 = parse_w();
           if (result1 !== null) {
@@ -5055,12 +5076,7 @@ window.WebIDLParser = (function(){
                     if (result6 !== null) {
                       result7 = parse_w();
                       if (result7 !== null) {
-                        result8 = [];
-                        result9 = parse_exMember();
-                        while (result9 !== null) {
-                          result8.push(result9);
-                          result9 = parse_exMember();
-                        }
+                        result8 = parse_ExceptionMembers();
                         if (result8 !== null) {
                           result9 = parse_w();
                           if (result9 !== null) {
@@ -5154,7 +5170,27 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_exMember() {
+      function parse_ExceptionMembers() {
+        var result0, result1;
+        var pos0;
+        
+        pos0 = pos;
+        result0 = [];
+        result1 = parse_ExceptionMember();
+        while (result1 !== null) {
+          result0.push(result1);
+          result1 = parse_ExceptionMember();
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, mem) { return mem ? mem : []; })(pos0, result0);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        return result0;
+      }
+      
+      function parse_ExceptionMember() {
         var result0;
         var pos0;
         
@@ -5178,8 +5214,7 @@ window.WebIDLParser = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        result0 = parse_extendedAttributeList();
-        result0 = result0 !== null ? result0 : "";
+        result0 = parse_ExtendedAttributeList();
         if (result0 !== null) {
           result1 = parse_s();
           result1 = result1 !== null ? result1 : "";
@@ -5246,7 +5281,23 @@ window.WebIDLParser = (function(){
         return result0;
       }
       
-      function parse_extendedAttributeList() {
+      function parse_ExtendedAttributeList() {
+        var result0;
+        var pos0;
+        
+        pos0 = pos;
+        result0 = parse_ExtendedAttributeListInner();
+        result0 = result0 !== null ? result0 : "";
+        if (result0 !== null) {
+          result0 = (function(offset, ea) { return ea ? ea : []; })(pos0, result0);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        return result0;
+      }
+      
+      function parse_ExtendedAttributeListInner() {
         var result0, result1, result2, result3, result4, result5, result6;
         var pos0, pos1;
         
