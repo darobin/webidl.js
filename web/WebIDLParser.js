@@ -3588,7 +3588,7 @@ window.WebIDLParser = (function(){
         }
         if (result0 !== null) {
           result0 = (function(offset, rest) {
-                    if (rest === ";") return { type: "stringifier" };
+                    if (rest === ";") return { type: "stringifier", stringifier: true };
                     else {
                         rest.stringifier = true;
                         return rest;
@@ -5727,4 +5727,4 @@ window.WebIDLParser = (function(){
   result.SyntaxError.prototype = Error.prototype;
   
   return result;
-})()
+})();
