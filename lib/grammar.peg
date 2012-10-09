@@ -238,7 +238,7 @@ attrOrOp
 Stringifier
     =   "stringifier" w rest:(Attribute / OperationRest / ";")
         {
-            if (rest === ";") return { type: "stringifier" };
+            if (rest === ";") return { type: "stringifier", stringifier: true };
             else {
                 rest.stringifier = true;
                 return rest;
