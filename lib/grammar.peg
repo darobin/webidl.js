@@ -168,13 +168,13 @@ definition
 
 // partial interface definition
 partialinterface
-    =   extAttrs:extendedAttributeList? S? "partial" S "interface" S name:identifier w "{" w mem:ifMember* w "}" w ";" w
+    =   extAttrs:ExtendedAttributeList S? "partial" S "interface" S name:identifier w "{" w mem:InterfaceMemberList w "}" w ";" w
 	    { return { type: "partialinterface", name: name, members: mem, extAttrs: extAttrs }; }
 
 // partial dictionary definition
 partialdictionary
     =   "partial" S "dictionary" S name:identifier w "{"
-        w members:dictionaryMember* w "}" w ";" w
+        w members:DictionaryMemberList w "}" w ";" w
         {
             return {
                 type: "partialdictionary",
@@ -185,35 +185,35 @@ partialdictionary
 
 // callback interface definition
 callbackinterface
-    =   extAttrs:extendedAttributeList? S? "callback" S "interface" S name:identifier w "{" w mem:ifMember* w "}" w ";" w
+    =   extAttrs:ExtendedAttributeList S? "callback" S "interface" S name:identifier w "{" w mem:InterfaceMemberList w "}" w ";" w
 	    { return { type: "callbackinterface", name: name, members: mem, extAttrs: extAttrs }; }
 
 
 // module definition
 module
-    =   extAttrs:extendedAttributeList? S? "module" S name:identifier w "{" w defs:definitions w "}" w ";" w
+    =   extAttrs:ExtendedAttributeList S? "module" S name:identifier w "{" w defs:definitions w "}" w ";" w
         { return { type: "module", name: name, definitions: defs, extAttrs: extAttrs }; }
 
 
 // implements definition
 implements
-    =   extAttrs:extendedAttributeList? S? target:ScopedName S "implements" S impl:ScopedName w ";" w
+    =   extAttrs:ExtendedAttributeList S? target:ScopedName S "implements" S impl:ScopedName w ";" w
         { return { type: 'implements', target: target, 'implements': impl, extAttrs: extAttrs }; }
 
 
 // interface definition
 interface
-    =   extAttrs:extendedAttributeList? S? "interface" S name:identifier w herit:ifInheritance? w "{" w mem:ifMember* w "}" w ";" w
+    =   extAttrs:ExtendedAttributeList S? "interface" S name:identifier w herit:Inheritance w "{" w mem:InterfaceMemberList w "}" w ";" w
         { return { type: "interface", name: name, inheritance: herit, members: mem, extAttrs: extAttrs }; }
 
 // enum definition
 enum
-    =   extAttrs:extendedAttributeList? S? "enum" S name:identifier w "{" w values:EnumValues w? ","? w "}" w ";" w
+    =   extAttrs:ExtendedAttributeList S? "enum" S name:identifier w "{" w values:EnumValues w? ","? w "}" w ";" w
         { return { type: "enum", name: name, values: values, extAttrs: extAttrs }; }
 
 // callback definition
 callback
-    =   extAttrs:extendedAttributeList? S? "callback" S name:identifier w "=" w ret:ReturnType S "(" w args:Arguments w ")" w ";" w
+    =   extAttrs:ExtendedAttributeList S? "callback" S name:identifier w "=" w ret:ReturnType S "(" w args:Arguments w ")" w ";" w
         { return { type: "callback", idlType: ret, name: name, args: args, extAttrs: extAttrs }; }
 
 EnumValues
@@ -227,16 +227,24 @@ EnumValuesRest
         { return rest; }
 
 
-ifInheritance
+Inheritance
+    =   herit:InheritanceInner?
+        { return herit ? herit : []; }
+
+InheritanceInner
     =   ":" w herit:ScopedNameList
         { return herit; }
 
-ifMember
+InterfaceMemberList
+    =   mem:InterfaceMember*
+        { return mem ? mem : []; }
+
+InterfaceMember
     =   mem:(const / attrOrOp)
         { return mem; }
 
 const
-    =   extAttrs:extendedAttributeList? S? "const" S type:type S name:identifier w "=" w value:constExpr w ";" w
+    =   extAttrs:ExtendedAttributeList S? "const" S type:type S name:identifier w "=" w value:constExpr w ";" w
         { return { type: "const", extAttrs: extAttrs, idlType: type, name: name, value: value }; }
 
 constExpr
@@ -258,7 +266,7 @@ Stringifier
         }
 
 Attribute
-    =   extAttrs:extendedAttributeList? w ro:("readonly" S)? "attribute" S type:type S name:identifier w gr:GetRaises? w sr:SetRaises? w ";" w
+    =   extAttrs:ExtendedAttributeList w ro:("readonly" S)? "attribute" S type:type S name:identifier w gr:GetRaises? w sr:SetRaises? w ";" w
         { return { type: "attribute", extAttrs: extAttrs, idlType: type, name: name, readonly: (ro ? true : false), getraises: gr, setraises: sr }; }
 
 GetRaises
@@ -270,7 +278,7 @@ SetRaises
         { return list; }
 
 Operation
-    =   extAttrs:extendedAttributeList? w quals:Qualifiers w rest:OperationRest
+    =   extAttrs:ExtendedAttributeList w quals:Qualifiers w rest:OperationRest
         {
             for (var k in quals) rest[k] = quals[k];
             if (extAttrs) rest.extAttrs = extAttrs;
@@ -301,7 +309,7 @@ ArgumentsRest
         { return rest; }
 
 Argument
-    =   extAttrs:extendedAttributeList? w "in"? w opt:("optional")? w type:type ell:"..."? S name:identifier
+    =   extAttrs:ExtendedAttributeList w "in"? w opt:("optional")? w type:type ell:"..."? S name:identifier
         { return { name: name, type: type, variadic: (ell ? true : false), optional: (opt ? true : false), extAttrs: extAttrs }; }
 
 Raises
@@ -310,8 +318,8 @@ Raises
 
 // dictionary definition
 dictionary
-    =   "dictionary" S name:identifier w superclass:ifInheritance? w "{"
-            w members:dictionaryMember* w "}" w ";" w
+    =   "dictionary" S name:identifier w superclass:Inheritance w "{"
+            w members:DictionaryMemberList w "}" w ";" w
             {
                 return {
                     type: "dictionary",
@@ -321,8 +329,12 @@ dictionary
                 };
             }
 
-dictionaryMember
-    =    extAttrs:extendedAttributeList? w type:type S name:identifier
+DictionaryMemberList
+    =   mem:DictionaryMember*
+        { return mem ? mem : []; }
+
+DictionaryMember
+    =    extAttrs:ExtendedAttributeList w type:type S name:identifier
          w defaultValue:defaultValue? w ";" w
          {
              return {
@@ -345,20 +357,36 @@ typedef
 
 // exception definition
 exception
-    =   extAttrs:extendedAttributeList? w "exception" S name:identifier w "{" w mem:exMember* w "}" w ";" w
-        { return { type: 'exception', name: name, members: mem, extAttrs: extAttrs }; }
+    =   extAttrs:ExtendedAttributeList w "exception" S name:identifier w herit:Inheritance w "{" w mem:ExceptionMembers w "}" w ";" w
+        {
+            return {
+                type: 'exception',
+                name: name,
+                inheritance: herit,
+                members: mem,
+                extAttrs: extAttrs,
+            };
+        }
 
-exMember
+ExceptionMembers
+    =   mem:ExceptionMember*
+        { return mem ? mem : []; }
+
+ExceptionMember
     =   mem:(const / field)
         { return mem; }
 
 field
-    =   extAttrs:extendedAttributeList? S? type:type S name:identifier w ";" w
+    =   extAttrs:ExtendedAttributeList S? type:type S name:identifier w ";" w
         { return { type: "field", extAttrs: extAttrs, idlType: type, name: name }; }
 
 
 // extended attributes
-extendedAttributeList
+ExtendedAttributeList
+    =   ea:ExtendedAttributeListInner?
+        { return ea ? ea : []; }
+
+ExtendedAttributeListInner
     =   w "[" w ea:ExtAttrs w "]" w
         { return ea; }
 
