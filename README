@@ -1,3 +1,4 @@
+[DEPRECATED] Use https://github.com/darobin/webidl2.js instead.
 
 WebIDLParser.js is, shockingly enough, a Javascript parser for WebIDL (http://dev.w3.org/2006/webapi/WebIDL/).
 
